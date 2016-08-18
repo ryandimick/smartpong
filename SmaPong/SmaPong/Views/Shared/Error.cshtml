@@ -1,0 +1,17 @@
+﻿@model HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<hgroup class="title">
+    <h1 class="error">Error.</h1>
+    @if (Model == null)
+    {
+        <p class="error">An unknown error occurred while processing your request.</p>
+    }
+    else
+    {
+       <p class="error">@Model.Exception.Message</p>
+    }
+</hgroup>

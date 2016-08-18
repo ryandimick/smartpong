@@ -1,0 +1,55 @@
+﻿@model SmaPong.Models.NewMatch
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Submit New Match</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Match Info</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            Match Date
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MatchDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MatchDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            Opponent
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.PlayerTwoId, Model.Opponents, "Choose...")
+                @Html.ValidationMessageFor(model => model.PlayerTwoId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            Result
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Placement, Model.PossibleOutcomes, "Choose...")
+                @Html.ValidationMessageFor(model => model.Placement, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Pending")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

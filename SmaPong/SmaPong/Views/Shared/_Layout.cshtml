@@ -1,0 +1,64 @@
+﻿@using SmaPong.Business
+@using SmaPong.Models
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title - SMArt Pong</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title">@Html.ActionLink("SMArt Pong", "Rankings", "Players")</p>
+                </div>
+                <div class="float-right">
+                    <section id="login">
+                        Hello, <span class="username">@User.Identity.Name</span>! @Html.ActionLink("Profile", "Profile", "Players", new {id = (int?)null}, null)
+                    </section>
+                    <nav>
+                        <ul id="menu">
+                            <li>@Html.ActionLink("Rankings", "Rankings", "Players")</li>
+                            <li>@Html.ActionLink("Tournaments", "Index", "Tournaments")</li>
+                            <li>@Html.ActionLink("Players", "Index", "Players")</li>
+                            <li>@Html.ActionLink("Matches", "Index", "Matches")</li>
+                            <li>@Html.ActionLink("Submit Match", "Create", "Matches")</li>
+                            @if (Global.Matches.Any(m => m.Status == MatchStatus.PendingConfirmation && m.PlayerTwoId == (Global.Players.SingleOrDefault(p => string.Equals(p.Username, User.Identity.Name, StringComparison.CurrentCultureIgnoreCase)) == null ? 0 : (Global.Players.Single(p => string.Equals(p.Username, User.Identity.Name, StringComparison.CurrentCultureIgnoreCase)).Id))))
+                            {
+                                <li>@Html.ActionLink("Pending Matches", "Pending", "Matches")</li>
+                            }
+                            <li>@Html.ActionLink("Challenge", "Index", "Challenges")</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year - SMA Solutions</p>
+                </div>
+                @if (@AdminBusiness.IsAdmin(User.Identity.Name))
+                {
+                    <div class="float-right">
+                        @Html.ActionLink("Admin", "Index", "Admin", new {id = (int?) null}, null) |
+                        @Html.ActionLink("Exceptions", "Index", "Exceptions")
+                    </div>
+                }
+            </div>
+        </footer>
+
+        @Scripts.Render("~/bundles/jquery")
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

@@ -1,0 +1,35 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<SmaPong.Models.PlayerDetail>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Players";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table>
+    <tr>
+        <th width="25%" class="th left">Name</th>
+        <th width="12%" class="th">Rating</th>
+        <th width="12%" class="th">Confidence</th>
+        <th width="20%" class="th">Activity Date</th>
+        <th width="12%" class="th">Pending</th>
+        <th width="8%" class="th">Active</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="td left">@Html.ActionLink(item.FullName, "Profile", new { id = item.Id })</td>
+            <td class="td">@Html.DisplayFor(modelItem => item.Rating)</td>
+            <td class="td">@Html.DisplayFor(modelItem => item.Confidence)</td>
+            <td class="td">@Html.DisplayFor(modelItem => item.ActivityDate)</td>
+            <td class="td">@Html.DisplayFor(modelItem => item.Pending)</td>
+            <td class="td">@Html.DisplayFor(modelItem => item.Active)</td>
+        </tr>
+    }
+</table>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

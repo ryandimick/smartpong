@@ -1,0 +1,64 @@
+﻿@model SmaPong.Models.Challenge
+@{
+    ViewBag.Title = "Challenges";
+    ViewBag.Message = "Dare someone to play you!";
+}
+
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                Customize the challenge with your own message for the email body.
+            </p>
+            <p>
+                Don't see the player you are looking for?  Players that have notifications turned off or have an empty or invalid email address are not available for challenging.  Sorry!
+            </p>
+        </div>
+    </section>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => model.ChallengerName)
+
+        <div class="form-group">
+            Challenge
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ChallengedId, Model.Opponents, "Choose...")
+                @Html.ValidationMessageFor(model => model.ChallengedId, "", new {@class = "text-danger"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            Challenge Time
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Timestamp, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Timestamp, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            Message
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-0 col-md-10">
+                <input type="submit" value="Send" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,52 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<SmaPong.Models.PlayerDetail>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Rankings";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                To learn more about "TrueSkill" visit
+                <a href="http://research.microsoft.com/en-us/projects/trueskill/details.aspx" title="TrueSkill Ranking System">this site</a>.
+                The page features <mark>general information, formulas, and samples</mark> to help you understand how ratings are calculated.
+                Rankings automatically update once matches are posted into the application.  If you have any questions about "TrueSkill", 
+                please contact Ryan.
+            </p>
+        </div>
+    </section>
+}
+<table>
+    <tr>
+        <th width="8%" class="th plain"/>
+        <th width="25%" class="th">Name</th>
+        <th width="12%" class="th">Rating</th>
+        <th width="12%" class="th">Confidence</th>
+        <th width="20%" class="th">Activity Date</th>
+        <th width="12%" class="th">Pending</th>
+    </tr>
+
+    @{int ranking = 1;}
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="td ranking">@ranking.ToString()</td>
+            <td class ="td">@Html.ActionLink(item.FullName, "Profile", new {id = item.Id})</td>
+            <td class="td">@Html.DisplayFor(modelItem => item.Rating)</td>
+            <td class="td">@Html.DisplayFor(modelItem => item.Confidence)</td>
+            <td class="td">@Html.DisplayFor(modelItem => item.ActivityDate)</td>
+            <td class="td">@Html.DisplayFor(modelItem => item.Pending)</td>
+        </tr>
+        ranking++;
+    }
+</table>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Rankings", new { page }))

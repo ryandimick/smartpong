@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SmaPong.Models.PlayerMatch>
+@{
+    ViewBag.Title = "Pending";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Matches Requiring Confirmation...</h2>
+<table>
+    <tr>
+        <th width="18%" class="th">Match Date</th>
+        <th width="18%" class="th">@Html.DisplayNameFor(model => model.Opponent)</th>
+        <th width="10%" class="th">@Html.DisplayNameFor(model => model.Result)</th>
+        <th width="12%" class="th">@Html.DisplayNameFor(model => model.Rating)</th>
+        <th width="12%" class="th">@Html.DisplayNameFor(model => model.Confidence)</th>
+        <th width="15%" class="th">@Html.DisplayNameFor(model => model.Status)</th>
+        <th/>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.MatchDate)</td>
+            <td>@Html.ActionLink(item.Opponent, "Profile", "Players", new { id = item.OpponentId }, null)</td>
+            <td>@Html.DisplayFor(modelItem => item.Result)</td>
+            <td>@Html.DisplayFor(modelItem => item.Rating)</td>
+            <td>@Html.DisplayFor(modelItem => item.Confidence)</td>
+            <td>@Html.DisplayFor(modelItem => item.Status)</td>
+            <td>@Html.ActionLink("Confirm", "Confirm", new { id = item.Id }, null)  | @Html.ActionLink("Contest", "Delete", new { id = item.Id })</td>
+        </tr>
+    }
+</table>

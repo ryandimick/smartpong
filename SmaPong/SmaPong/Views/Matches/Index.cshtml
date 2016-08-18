@@ -1,0 +1,41 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<SmaPong.Models.MatchDetail>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Match History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Match History</h2>
+<table>
+    <tr>
+        <th width="16%" class="th">Match Date</th>
+        <th width="16%" class="th">Winner</th>
+        <th width="12%" class="th">&#916;</th>
+        <th width="16%" class="th">Loser</th>
+        <th width="12%" class="th">&#916;</th>
+        <th width="16%" class="th">Status</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.MatchDate)</td>
+            <td>@Html.ActionLink(item.WinningPlayerId == @item.PlayerOneId ? item.PlayerOneName : item.PlayerTwoName, "Profile", "Players", new {id = item.WinningPlayerId}, null)</td>
+            <td class="td matchwinner">@(item.WinningPlayerId == @item.PlayerOneId ? @Html.DisplayFor(modelItem => item.PlayerOneMuDelta) : @Html.DisplayFor(modelItem => item.PlayerTwoMuDelta))</td>
+            <td>@Html.ActionLink(item.WinningPlayerId == @item.PlayerOneId ? item.PlayerTwoName : item.PlayerOneName, "Profile", "Players", new {id = item.WinningPlayerId == item.PlayerOneId ? item.PlayerTwoId : item.PlayerOneId}, null)</td>
+            <td class="td matchloser">@(item.WinningPlayerId == @item.PlayerOneId ? @Html.DisplayFor(modelItem => item.PlayerTwoMuDelta) : @Html.DisplayFor(modelItem => item.PlayerOneMuDelta))</td>
+            @if (@ViewBag.PlayerId == item.PlayerTwoId && item.Status == SmaPong.Models.MatchStatus.PendingConfirmation)
+            {
+                <td>@Html.ActionLink(item.Status.ToString(), "Confirm", new { id = item.Id})</td>
+            }
+            else
+            {
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+            }
+        </tr>
+    }
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

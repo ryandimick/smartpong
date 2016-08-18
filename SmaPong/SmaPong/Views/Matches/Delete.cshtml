@@ -1,0 +1,48 @@
+﻿@model SmaPong.Models.PlayerMatch
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Contest Match</h2>
+
+<h3>This match will be deleted, are you sure?</h3>
+<div>
+    <h4>Match</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Match Date
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MatchDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Opponent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Opponent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Result)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Result)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Pending")
+        </div>
+    }
+</div>

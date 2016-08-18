@@ -1,0 +1,107 @@
+﻿@model SmaPong.Models.PlayerDetail
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <div width="45%">
+        <dl class="dl-horizontal">
+            <dt>ID</dt>
+            <dd>@Html.DisplayFor(model => model.Id)</dd>
+            <dt>Username</dt>
+            <dd>@Html.DisplayFor(model => model.Username)</dd>
+            <dt>First Name</dt>
+            <dd>@Html.DisplayFor(model => model.FirstName)</dd>
+            <dt>Last Name</dt>
+            <dd>@Html.DisplayFor(model => model.Surname)</dd>
+            <dt>@Html.DisplayNameFor(model => model.Nickname)</dt>
+            <dd>@Html.DisplayFor(model => model.Nickname)</dd>
+            <dt>Email</dt>
+            <dd>@Html.DisplayFor(model => model.Email)</dd>
+            <dt>Send Notifications</dt>
+            <dd>@Html.DisplayFor(model => model.Notifications)</dd>
+        </dl>
+    </div>
+</div>
+@if (Model.Username == @User.Identity.Name)
+{
+    <div class="form-group">
+        <div class="col-md-offset-0 col-md-10">
+            @*<input type="button" class="btn btn-primary" value="Edit Picture" onclick="@("window.location.href='" + @Url.Action("Profile", new {id = Model.Id}) + "'");" />*@
+
+            <input type="button" class="btn btn-primary btn" value="Edit Details" onclick="@("window.location.href='" + @Url.Action("Edit", new {id = Model.Id}) + "'");" />
+        </div>
+    </div>
+}
+<div>
+    <div style="width: 30%; height: 200px; float: left">
+        <dl>
+            <dt>@Html.DisplayNameFor(model => model.Rating)</dt>
+            <dd>@Html.DisplayFor(model => model.Rating)</dd>
+            <dt>@Html.DisplayNameFor(model => model.Confidence)</dt>
+            <dd>@Html.DisplayFor(model => model.Confidence)</dd>
+            <dt>Activity Date</dt>
+            <dd>@Html.DisplayFor(model => model.ActivityDate)</dd>
+        </dl>
+
+        <h3>Overall Record</h3>
+        <table>
+            <tr>
+                <th width="20%" class="th">Wins</th>
+                <th width="20%" class="th">Losses</th>
+                <th width="40%" class="th">Percentage</th>
+            </tr>
+            <tr>
+                <td>@Html.DisplayFor(modelItem => Model.OverallRecord.Wins)</td>
+                <td>@Html.DisplayFor(modelItem => Model.OverallRecord.Losses)</td>
+                <td>@Html.DisplayFor(modelItem => Model.OverallRecord.Percentage)</td>
+            </tr>
+        </table>
+
+        <h3>Records Per Opponent</h3>
+        <table>
+            <tr>
+                <th width="35%" class="th">Opponent</th>
+                <th width="15%" class="th">Wins</th>
+                <th width="15%" class="th">Losses</th>
+                <th width="25%" class="th">Percentage</th>
+            </tr>
+            @foreach (var item in Model.Records)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.OpponentName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Wins)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Losses)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Percentage)</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th width="20%" class="th">Match Date</th>
+                <th width="20%" class="th">Opponent</th>
+                <th width="10%" class="th">Result</th>
+                <th width="12%" class="th">Rating</th>
+                <th width="12%" class="th">Confidence</th>
+                <th width="16%" class="th">Status</th>
+            </tr>
+
+            @foreach (var item in Model.Matches)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.MatchDate)</td>
+                    <td>@Html.ActionLink(item.Opponent, "Profile", new {id = item.OpponentId})</td>
+                    <td>@Html.DisplayFor(modelItem => item.Result)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Rating)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Confidence)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
