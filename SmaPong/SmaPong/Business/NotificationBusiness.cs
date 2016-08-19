@@ -9,13 +9,13 @@ namespace SmaPong.Business
         {
             using (var smtpClient = new SmtpClient("smtp.gmail.com", 587))
             {
-                var fromAddress = new MailAddress("alerts@smaascern.com");
+                var fromAddress = new MailAddress("account");
                 var msg = new MailMessage { From = fromAddress, Subject = subject, Body = body };
 
                 msg.To.Add(to);
 
                 smtpClient.EnableSsl = true;
-                smtpClient.Credentials = new NetworkCredential("alerts@smaascern.com", "0pC0nxp$!!");
+                smtpClient.Credentials = new NetworkCredential("username", "password");
 
                 smtpClient.Send(msg);
                 msg.Dispose();
