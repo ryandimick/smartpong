@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -115,5 +116,19 @@ namespace SmartPong.Models
         /// </summary>
         [NotMapped]
         public string DisplayName => string.IsNullOrWhiteSpace(Nickname) ? $"{GivenName} {Surname}" : $"{GivenName} \"{Nickname}\" {Surname}";
+
+        /// <summary>
+        /// 
+        /// The collection of ratings associated with the user.
+        /// 
+        /// </summary>
+        public ICollection<UserRating> UserRatings { get; set; }
+
+        /// <summary>
+        /// 
+        /// The collection of teams associated with the user.
+        /// 
+        /// </summary>
+        public ICollection<Team> Teams { get; set; }
     }
 }

@@ -41,7 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Match.cs" />
+    <Compile Include="Models\MatchParticipant.cs" />
+    <Compile Include="Models\MatchStatus.cs" />
+    <Compile Include="Models\MatchTeamRating.cs" />
+    <Compile Include="Models\MatchType.cs" />
+    <Compile Include="Models\MatchUserRating.cs" />
+    <Compile Include="Models\RatingType.cs" />
+    <Compile Include="Models\Team.cs" />
+    <Compile Include="Models\TeamRating.cs" />
+    <Compile Include="Models\TrueskillRating.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserRating.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
