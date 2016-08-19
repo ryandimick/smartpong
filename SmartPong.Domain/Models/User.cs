@@ -61,7 +61,7 @@ namespace SmartPong.Models
 
         /// <summary>
         /// 
-        /// A valid e-mail address for the user used for notifications.
+        /// A valid e-mail address for the user for notifications.
         /// 
         /// </summary>
         [MaxLength(50)]
