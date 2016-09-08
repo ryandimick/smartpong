@@ -1,16 +1,18 @@
-﻿using SmartPong.Models;
+﻿using System.Collections.Generic;
+using SmartPong.Models;
 
 namespace SmartPong
 {
     public class SmartPongRepository : ISmartPongRepository
     {
-        private readonly SmartPongContext _context;
+        private readonly SettingsManager _settingsManager;
         private readonly UserManager _userManager;
 
         internal SmartPongRepository(string connectionString)
         {
-            _context = new SmartPongContext(connectionString);
-            _userManager = new UserManager(_context);
+            var context = new SmartPongContext(connectionString);
+            _userManager = new UserManager(context);
+            _settingsManager = new SettingsManager(context);
         }
 
         /// <summary>
@@ -89,6 +91,18 @@ namespace SmartPong
 
         /// <summary>
         /// 
+        /// Returns all settings.
+        /// 
+        /// </summary>
+        /// 
+        /// <returns>The collection of settings.</returns>
+        public IEnumerable<Setting> RetrieveSettings()
+        {
+            return _settingsManager.RetrieveSettings();
+        } 
+
+        /// <summary>
+        /// 
         /// Returns a user.
         /// 
         /// </summary>
@@ -113,6 +127,20 @@ namespace SmartPong
         public User RetrieveUser(string username)
         {
             return _userManager.RetrieveUser(username);
+        }
+
+        /// <summary>
+        /// 
+        /// Updates a configuration setting with a new value.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="updatedSetting">The setting object containing updated values.</param>
+        /// 
+        /// <returns>The setting object with updated values.</returns>
+        public Setting UpdateSetting(Setting updatedSetting)
+        {
+            return _settingsManager.UpdateSetting(updatedSetting);
         }
 
         /// <summary>

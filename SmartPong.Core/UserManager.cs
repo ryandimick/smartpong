@@ -35,6 +35,9 @@ namespace SmartPong
 
         internal User CreateUser(string username, string givenName, string surname, string email, string nickname)
         {
+            /* TODO:
+             * Generate default ratings 
+             */
             var newUser = new User
             {
                 Username = username,

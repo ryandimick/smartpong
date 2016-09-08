@@ -1,4 +1,5 @@
-﻿using SmartPong.Models;
+﻿using System.Collections.Generic;
+using SmartPong.Models;
 
 namespace SmartPong
 {
@@ -65,6 +66,15 @@ namespace SmartPong
 
         /// <summary>
         /// 
+        /// Returns all settings.
+        /// 
+        /// </summary>
+        /// 
+        /// <returns>The collection of settings.</returns>
+        IEnumerable<Setting> RetrieveSettings();
+
+        /// <summary>
+        /// 
         /// Returns a user.
         /// 
         /// </summary>
@@ -84,6 +94,17 @@ namespace SmartPong
         /// 
         /// <returns>The requested user.</returns>
         User RetrieveUser(string username);
+
+        /// <summary>
+        /// 
+        /// Updates a configuration setting with a new value.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="updatedSetting">The setting object containing updated values.</param>
+        /// 
+        /// <returns>The setting object with updated values.</returns>
+        Setting UpdateSetting(Setting updatedSetting);
 
         /// <summary>
         /// 
