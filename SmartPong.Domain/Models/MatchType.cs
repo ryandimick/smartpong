@@ -33,5 +33,11 @@ namespace SmartPong.Models
         /// 
         /// </summary>
         public ICollection<Match> Matches { get; set; }
+
+        public enum Type : int
+        {
+            Singles = 1,
+            Doubles = 2
+        }
     }
 }

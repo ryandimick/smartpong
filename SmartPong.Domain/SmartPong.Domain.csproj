@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\InvalidMatchException.cs" />
+    <Compile Include="Exceptions\SmartPongException.cs" />
     <Compile Include="Models\Match.cs" />
     <Compile Include="Models\MatchParticipant.cs" />
     <Compile Include="Models\MatchStatus.cs" />
@@ -52,6 +54,7 @@
     <Compile Include="Models\MatchType.cs" />
     <Compile Include="Models\MatchUserRating.cs" />
     <Compile Include="Models\RatingType.cs" />
+    <Compile Include="Models\Setting.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\TeamRating.cs" />
     <Compile Include="Models\TrueskillRating.cs" />

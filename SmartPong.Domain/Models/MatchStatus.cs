@@ -33,5 +33,13 @@ namespace SmartPong.Models
         /// 
         /// </summary>
         public ICollection<Match> Matches { get; set; }
+
+        public enum Type : int
+        {
+            Scheduled = 1,
+            Submitted = 2,
+            Pending = 3,
+            Posted = 4
+        }
     }
 }

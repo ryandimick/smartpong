@@ -69,6 +69,13 @@ namespace SmartPong
         /// 
         /// </summary>
         public DbSet<RatingType> RatingTypes { get; set; }
+        
+        /// <summary>
+        /// 
+        /// The collection of settings in the database context.
+        /// 
+        /// </summary>
+        public DbSet<Setting> Settings { get; set; }
 
         /// <summary>
         /// 
