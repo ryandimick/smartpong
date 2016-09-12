@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.Title = "Rankings";
+}
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Rankings</h2>
+                    </header>
+                    <div>
+                        <div class="widget-body no-padding">
+                            <div id="tabs">
+                                <ul>
+                                    <li>
+                                        <a href="#tabs-individual">Individual</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tabs-doubles">Doubles</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tabs-teams">Teams</a>
+                                    </li>
+                                </ul>
+                                <div id="tabs-individual">
+                                    @{Html.RenderAction("Singles", "Users");}
+                                </div>
+                                <div id="tabs-doubles">
+                                    @{Html.RenderAction("Doubles", "Users");}
+                                </div>
+                                <div id="tabs-teams">
+                                    <p>
+                                        Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section pagespecific {
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        if (!window.jQuery) {
+            document.write('<script src="/js/libs/jquery-2.1.1.min.js"><\/script>');
+        }
+    </script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script>
+        if (!window.jQuery.ui) {
+            document.write('<script src="/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+        }
+    </script>
+    <script src="/js/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="/js/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="/js/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="/js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="/js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#tabs').tabs();
+
+            var breakpointDefinition = {
+                tablet: 1024,
+                phone: 480
+            };
+
+            var responsiveHelperDatatableInd = undefined;
+            var responsiveHelperDatatableDoub = undefined;
+
+            $('#individual').DataTable({
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
+                            "t" +
+                            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+                "autoWidth": true,
+                "iDisplayLength": 25,
+                "preDrawCallback": function () {
+                    if (!responsiveHelperDatatableInd) {
+                        responsiveHelperDatatableInd = new ResponsiveDatatablesHelper($('#individual'), breakpointDefinition);
+                    }
+                },
+                "rowCallback": function (nRow) {
+                    responsiveHelperDatatableInd.createExpandIcon(nRow);
+                },
+                "drawCallback": function () {
+                    responsiveHelperDatatableInd.respond();
+                }
+            });
+
+            $('#doubles').DataTable({
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
+                            "t" +
+                            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+                "autoWidth": true,
+                "iDisplayLength": 25,
+                "preDrawCallback": function () {
+                    if (!responsiveHelperDatatableDoub) {
+                        responsiveHelperDatatableDoub = new ResponsiveDatatablesHelper($('#doubles'), breakpointDefinition);
+                    }
+                },
+                "rowCallback": function (nRow) {
+                    responsiveHelperDatatableDoub.createExpandIcon(nRow);
+                },
+                "drawCallback": function () {
+                    responsiveHelperDatatableDoub.respond();
+                }
+            });
+
+        });
+
+    </script>
+}

@@ -1,0 +1,106 @@
+﻿@model SmartPong.Models.User
+<div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+    <div class="well no-padding">
+        <form action="@Url.Action("Register", "Users")" method="POST" id="smart-form-register" class="smart-form client-form">
+            <header>
+                Registration
+            </header>
+            @Html.AntiForgeryToken()
+            <fieldset>
+                <section>
+                    <label class="input">
+                        <i class="icon-append fa fa-user"></i>
+                        <input type="text" name="username" placeholder="Username" id="username" autocomplete="off" value="@Model.Username" readonly>
+                        <b class="tooltip tooltip-bottom-right">Username used to access the website.</b>
+                    </label>
+                </section>
+                <section>
+                    <label class="input">
+                        <i class="icon-append fa fa-user"></i>
+                        <input type="text" name="givenname" placeholder="First name" id="givenname" autocomplete="off" value="@Model.GivenName">
+                        <b class="tooltip tooltip-bottom-right">The first name to identify you as on the website.</b>
+                    </label>
+                </section>
+                <section>
+                    <label class="input">
+                        <i class="icon-append fa fa-user"></i>
+                        <input type="text" name="surname" placeholder="Last name" id="surname" autocomplete="off" value="@Model.Surname">
+                        <b class="tooltip tooltip-bottom-right">The last name to identify you as on the website.</b>
+                    </label>
+                </section>
+                <section>
+                    <label class="input">
+                        <i class="icon-append fa fa-envelope"></i>
+                        <input type="email" name="email" placeholder="Email address" id="email" autocomplete="off" value="@Model.Email">
+                        <b class="tooltip tooltip-bottom-right">Optional address notifications would get sent to.</b>
+                    </label>
+                </section>
+                <section>
+                    <label class="input">
+                        <i class="icon-append fa fa-tag"></i>
+                        <input type="text" name="nickname" placeholder="Nickname" id="nickname" autocomplete="off" value="@Model.Nickname">
+                        <b class="tooltip tooltip-bottom-right">Optional name you'd like to be known as, e.g. First Name "Nickname" Last Name.</b>
+                    </label>
+                </section>
+            </fieldset>
+            <footer>
+                <button type="submit" class="btn btn-primary">
+                    Register
+                </button>
+            </footer>
+            <div class="message">
+                <i class="fa fa-check"></i>
+                <p>
+                    Thank you for your registration!
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section pagespecific {
+    <script type="text/javascript">
+
+        $(function () {
+            // Validation
+            $("#smart-form-register").validate({
+                // Rules for form validation
+                rules: {
+                    email: {
+                        required: false,
+                        email: true
+                    },
+                    givenname: {
+                        required: true
+                    },
+                    surname: {
+                        required: true
+                    },
+                    nickname: {
+                        required: false
+                    }
+                },
+
+                // Messages for form validation
+                messages: {
+                    email: {
+                        email: 'Please enter a valid email address'
+                    },
+                    givenname: {
+                        required: 'Please enter your first name'
+                    },
+                    surname: {
+                        required: 'Please enter your last name'
+                    }
+                },
+
+                // Do not change code below
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.parent());
+                }
+            });
+        });
+
+    </script>
+
+}

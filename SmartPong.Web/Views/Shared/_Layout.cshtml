@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <title> SmartPong </title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- #CSS Links -->
+    <!-- Basic Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/font-awesome.min.css">
+
+    <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/smartadmin-production-plugins.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/smartadmin-production.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/smartadmin-skins.min.css">
+
+    <!-- SmartAdmin RTL Support -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/smartadmin-rtl.min.css">
+
+    <!-- We recommend you use "your_style.css" to override SmartAdmin
+         specific styles this will also ensure you retrain your customization with each SmartAdmin update.
+    <link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css"> -->
+    <!-- #FAVICONS -->
+    <link rel="shortcut icon" href="/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
+
+    <!-- #GOOGLE FONT -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+    <!-- #APP SCREEN / ICONS -->
+    <!-- Specifying a Webpage Icon for Web Clip
+         Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+    <link rel="apple-touch-icon" href="/img/splash/sptouch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/splash/touch-icon-ipad.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/splash/touch-icon-iphone-retina.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/splash/touch-icon-ipad-retina.png">
+
+    <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Startup image for web apps -->
+    <link rel="apple-touch-startup-image" href="/img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+    <link rel="apple-touch-startup-image" href="/img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+    <link rel="apple-touch-startup-image" href="/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+
+</head>
+<body class="minified">
+    <header id="header">
+        <div id="logo-group">
+            <!-- PLACE YOUR LOGO HERE -->
+            <span id="logo"> <img src="/img/logo.png" alt="SmartAdmin"> </span>
+            <!-- END LOGO PLACEHOLDER -->
+        </div>
+        <div class="pull-right">
+            <div id="fullscreen" class="btn-header transparent pull-right">
+                <span> <a href="javascript:void(0);" data-action="launchFullscreen" title="Full Screen"><i class="fa fa-arrows-alt"></i></a> </span>
+            </div>
+            <div id="hide-menu" class="btn-header pull-right">
+                <span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+            </div>
+
+            <!-- #MOBILE -->
+            <!-- Top menu profile link : this shows only when top menu is active -->
+            <ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">
+                <li class="">
+                    <ul class="dropdown-menu pull-right">
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="toggleShortcut"><i class="fa fa-arrow-down"></i> <u>S</u>hortcut</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="launchFullscreen"><i class="fa fa-arrows-alt"></i> Full <u>S</u>creen</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <aside id="left-panel">
+        <nav>
+            <ul>
+                <li>
+                    <a href=@Url.Action("Index", "Rankings")><i class="fa fa-lg fa-fw fa-users"></i> <span class="menu-item-parent">Rankings</span> </a>
+                </li>
+                @*<li>
+                    <a href=@Url.Action("Index", "Tournaments")><i class="fa fa-lg fa-fw fa-trophy"></i> <span class="menu-item-parent">Tournaments</span> </a>
+                </li>*@
+                <li>
+                    <a href=@Url.Action("Index", "Matches")><i class="fa fa-lg fa-fw fa-history"></i> <span class="menu-item-parent">Matches</span> </a>
+                </li>
+                <li>
+                    <a href=@Url.Action("Create", "Matches")><i class="fa fa-lg fa-fw fa-plus"></i> <span class="menu-item-parent">Submit Match</span> </a>
+                </li>
+                @*@if (Global.Matches.Any(m => m.Status == MatchStatus.PendingConfirmation && m.PlayerTwoId == (Global.Players.SingleOrDefault(p => string.Equals(p.Username, User.Identity.Name, StringComparison.CurrentCultureIgnoreCase)) == null ? 0 : (Global.Players.Single(p => string.Equals(p.Username, User.Identity.Name, StringComparison.CurrentCultureIgnoreCase)).Id))))
+                    {
+                        <li>
+                            <a href=@Url.Action("Pending", "Matches")><i class="fa fa-lg fa-fw fa-check"></i> <span class="menu-item-parent">Confirm Matches</span> </a>
+                        </li>
+                    }*@
+                <li>
+                    <a href=@Url.Action("Index", "Help")><i class="fa fa-lg fa-fw fa-info"></i> <span class="menu-item-parent">About</span></a>
+                </li>
+            </ul>
+        </nav>
+
+        <span class="minifyme" data-action="minifyMenu">
+            <i class="fa fa-arrow-circle-left hit"></i>
+        </span>
+
+    </aside>
+    <div id="main" role="main">
+        <div id="content">
+            @RenderBody()
+        </div>
+
+    </div>
+    <div class="page-footer">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <span class="txt-color-white">SmartPong 2.0.0 <span class="hidden-xs"> - CreativeSlalom</span> © 2015-@DateTime.Now.Year</span>
+            </div>
+
+            <div class="col-xs-6 col-sm-6 text-right hidden-xs">
+                <div class="txt-color-white inline-block">
+                    @Html.ActionLink("Admin", "Index", "Admin", new { id = (int?)null }, null) |
+                    @Html.ActionLink("Exceptions", "Index", "Exceptions")
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        if (!window.jQuery) {
+            document.write('<script src="/js/libs/jquery-2.1.1.min.js"><\/script>');
+        }
+    </script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script>
+        if (!window.jQuery.ui) {
+            document.write('<script src="/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+        }
+    </script>
+
+    <!-- IMPORTANT: APP CONFIG -->
+    <script src="/js/app.config.js"></script>
+
+    <!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
+    <script src="/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+
+    <!-- BOOTSTRAP JS -->
+    <script src="/js/bootstrap/bootstrap.min.js"></script>
+
+    <!-- JARVIS WIDGETS -->
+    <script src="/js/smartwidgets/jarvis.widget.min.js"></script>
+
+    <!-- JQUERY VALIDATE -->
+    <script src="/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+    <!-- JQUERY MASKED INPUT -->
+    <script src="/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+    <!-- JQUERY SELECT2 INPUT -->
+    <script src="/js/plugin/select2/select2.min.js"></script>
+
+    <!-- JQUERY UI + Bootstrap Slider -->
+    <script src="/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+    <!-- browser msie issue fix -->
+    <script src="/js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+    <!-- FastClick: For mobile devices -->
+    <script src="/js/plugin/fastclick/fastclick.min.js"></script>
+
+    <!-- MAIN APP JS FILE -->
+    <script src="/js/app.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            pageSetUp();
+        });
+
+    </script>
+
+    @RenderSection("pagespecific", required: false)
+</body>
+</html>
