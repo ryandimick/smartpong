@@ -9,13 +9,6 @@
     {
         /// <summary>
         /// 
-        /// The unique identifier of the rating.
-        /// 
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// 
         /// The mean value of the rating.
         /// 
         /// </summary>

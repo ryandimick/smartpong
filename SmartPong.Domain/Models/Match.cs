@@ -85,13 +85,6 @@ namespace SmartPong.Models
 
         /// <summary>
         /// 
-        /// The timestamp when the match was officially posted and ratings updated.  Null if not posted.
-        /// 
-        /// </summary>
-        public DateTime? PostDate { get; set; }
-
-        /// <summary>
-        /// 
         /// The type of the match.
         /// 
         /// </summary>
