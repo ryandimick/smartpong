@@ -12,6 +12,18 @@ namespace SmartPong.Models
     /// </summary>
     public class Match
     {
+        public Match()
+        {
+            
+        }
+
+        public Match(MatchType.Type type, DateTime? matchDate = null)
+        {
+            MatchTypeId = (int) type;
+            MatchDate = matchDate;
+            MatchParticipants = new List<MatchParticipant>();
+        }
+
         /// <summary>
         /// 
         /// The unique identifier of the match.

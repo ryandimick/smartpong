@@ -62,6 +62,7 @@
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\TeamRating.cs" />
     <Compile Include="Models\TrueskillRating.cs" />
+    <Compile Include="Models\TrueskillRatingChange.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserRating.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
