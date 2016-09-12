@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Moserware.Skills;
 using SmartPong.Models;
+using System.Web.Script.Serialization;
 
 namespace SmartPong
 {
@@ -35,9 +38,6 @@ namespace SmartPong
 
         internal User CreateUser(string username, string givenName, string surname, string email, string nickname)
         {
-            /* TODO:
-             * Generate default ratings 
-             */
             var newUser = new User
             {
                 Username = username,
@@ -47,6 +47,32 @@ namespace SmartPong
                 Nickname = nickname,
                 Enabled = true,
                 CreateDate = DateTime.Now
+            };
+
+            /* TODO:
+            * Generate default ratings the right way.
+            */
+
+            var trueSkillDefault = new TrueskillRating
+            {
+                Skill = GameInfo.DefaultGameInfo.DefaultRating.Mean,
+                Variance = GameInfo.DefaultGameInfo.DefaultRating.Mean
+            };
+
+            var trueSkillData = new JavaScriptSerializer().Serialize(trueSkillDefault);
+
+            newUser.UserRatings = new List<UserRating>
+            {
+                new UserRating
+                {
+                    RatingTypeId = 1,
+                    RatingData = trueSkillData
+                },
+                new UserRating
+                {
+                    RatingTypeId = 2,
+                    RatingData = trueSkillData
+                }
             };
 
             _context.Users.Add(newUser);

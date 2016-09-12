@@ -5,6 +5,7 @@ namespace SmartPong
 {
     public class SmartPongRepository : ISmartPongRepository
     {
+        private readonly MatchManager _matchManager;
         private readonly SettingsManager _settingsManager;
         private readonly UserManager _userManager;
 
@@ -13,6 +14,36 @@ namespace SmartPong
             var context = new SmartPongContext(connectionString);
             _userManager = new UserManager(context);
             _settingsManager = new SettingsManager(context);
+            _matchManager = new MatchManager(context);
+        }
+
+        /// <summary>
+        /// 
+        /// Confirms the outcome of a match and makes the posted rating changes official.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="matchId">The unique identifier of the match's outcome to confirm.</param>
+        /// <param name="userId">The unique identifier of the user that confirmed the match's outcome.</param>
+        /// 
+        /// <returns>The match that was confirmed.</returns>
+        public Match ConfirmMatch(int matchId, int userId)
+        {
+            return _matchManager.ConfirmMatch(matchId, userId);
+        }
+
+        /// <summary>
+        /// 
+        /// Submits a new match into the SmartPong application that will require confirmation.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="newMatch">The complete match object to create.</param>
+        /// 
+        /// <returns>The match that was submitted.</returns>
+        public Match CreateMatch(Match newMatch)
+        {
+            return _matchManager.CreateMatch(newMatch);
         }
 
         /// <summary>
@@ -31,6 +62,18 @@ namespace SmartPong
         public User CreateUser(string username, string givenName, string surname, string email, string nickname = "")
         {
             return _userManager.CreateUser(username, givenName, surname, email, nickname);
+        }
+
+        /// <summary>
+        /// 
+        /// Removes a match record and all associated records and rating changes associated with it.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="matchId">The unique identifier of the match to remove.</param>
+        public void DeleteMatch(int matchId)
+        {
+            _matchManager.DeleteMatch(matchId);
         }
 
         /// <summary>

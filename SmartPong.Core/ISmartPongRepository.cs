@@ -7,6 +7,29 @@ namespace SmartPong
     {
         /// <summary>
         /// 
+        /// Confirms the outcome of a match and makes the posted rating changes official.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="matchId">The unique identifier of the match's outcome to confirm.</param>
+        /// <param name="userId">The unique identifier of the user that confirmed the match's outcome.</param>
+        /// 
+        /// <returns>The match that was confirmed.</returns>
+        Match ConfirmMatch(int matchId, int userId);
+
+        /// <summary>
+        /// 
+        /// Submits a new match into the SmartPong application that will require confirmation.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="newMatch">The complete match object to create.</param>
+        /// 
+        /// <returns>The match that was submitted.</returns>
+        Match CreateMatch(Match newMatch);
+
+        /// <summary>
+        /// 
         /// Creates a user.
         /// 
         /// </summary>
@@ -19,6 +42,15 @@ namespace SmartPong
         /// 
         /// <returns>The user that was created.</returns>
         User CreateUser(string username, string givenName, string surname, string email, string nickname = "");
+
+        /// <summary>
+        /// 
+        /// Removes a match record and all associated records and rating changes associated with it.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="matchId">The unique identifier of the match to remove.</param>
+        void DeleteMatch(int matchId);
 
         /// <summary>
         /// 
