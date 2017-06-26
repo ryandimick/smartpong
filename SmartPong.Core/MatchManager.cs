@@ -218,6 +218,16 @@ namespace SmartPong
             }
         }
 
+        internal IEnumerable<Match> RetrieveMatches()
+        {
+            return _context.Matches.Include(x => x.MatchParticipants).Include(x => x.MatchStatus);
+        }
+
+        internal IEnumerable<Match> RetrieveMatches(Func<Match, bool> predicate)
+        {
+            return RetrieveMatches().Where(predicate);
+        } 
+
         private void UpdateNewerMatches(int matchType, DateTime matchDate, ICollection<User> dirtyUsers)
         {
             var matches = _context.Matches.Where(m => m.MatchDate > matchDate && m.MatchTypeId == matchType).OrderBy(m => m.MatchDate).Include(x => x.MatchParticipants).ToList();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using Moserware.Skills;
 using SmartPong.Models;
@@ -131,6 +132,11 @@ namespace SmartPong
             return user;
         }
 
+        internal IEnumerable<UserRating> RetrieveRatings(int typeId)
+        {
+            return _context.UserRatings.Where(ur => ur.RatingTypeId == typeId).Include(x => x.User);
+        } 
+
         internal User RetrieveUser(int userId)
         {
             return FindUser(userId);
@@ -140,6 +146,16 @@ namespace SmartPong
         {
             return FindUser(username);
         }
+
+        internal IEnumerable<User> RetrieveUsers(Func<User, bool> predicate)
+        {
+            return RetrieveUsers().Where(predicate);
+        }
+
+        private IEnumerable<User> RetrieveUsers()
+        {
+            return _context.Users;
+        } 
 
         private User Update(User oldUser, User newUser)
         {
