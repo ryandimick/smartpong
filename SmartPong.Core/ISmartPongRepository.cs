@@ -123,10 +123,10 @@ namespace SmartPong
         /// 
         /// </summary>
         /// 
-        /// <param name="typeId">The unique identifier of the rating type.</param>
+        /// <param name="type">The user rating type to retrieve.</param>
         /// 
         /// <returns>The collection of user ratings.</returns>
-        IEnumerable<UserRating> RetrieveUserRatings(int typeId);
+        IEnumerable<UserRating> RetrieveUserRatings(UserRatingType type);
 
         /// <summary>
         /// 

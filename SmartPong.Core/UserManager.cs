@@ -132,9 +132,9 @@ namespace SmartPong
             return user;
         }
 
-        internal IEnumerable<UserRating> RetrieveRatings(int typeId)
+        internal IEnumerable<UserRating> RetrieveRatings(UserRatingType type)
         {
-            return _context.UserRatings.Where(ur => ur.RatingTypeId == typeId).Include(x => x.User);
+            return _context.UserRatings.Where(ur => ur.RatingTypeId == (int) type).Include(x => x.User);
         } 
 
         internal User RetrieveUser(int userId)

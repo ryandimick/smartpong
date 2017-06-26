@@ -65,6 +65,7 @@
     <Compile Include="Models\TrueskillRatingChange.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserRating.cs" />
+    <Compile Include="Models\UserRatingType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartPongContext.cs" />
   </ItemGroup>

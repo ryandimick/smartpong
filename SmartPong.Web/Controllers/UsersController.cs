@@ -19,7 +19,7 @@ namespace SmartPong.Controllers
 
         public PartialViewResult Singles()
         { 
-            var userRatings = Global.Repository.RetrieveUserRatings(1);
+            var userRatings = Global.Repository.RetrieveUserRatings(UserRatingType.TrueskillSingles);
             var viewModels = UserRankingViewModel.Generate(userRatings);
             return PartialView("_singlesRankings", viewModels);
         }
