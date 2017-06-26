@@ -19,24 +19,24 @@
                                     <li>
                                         <a href="#tabs-individual">Individual</a>
                                     </li>
-                                    <li>
+                                    @*<li>
                                         <a href="#tabs-doubles">Doubles</a>
                                     </li>
                                     <li>
                                         <a href="#tabs-teams">Teams</a>
-                                    </li>
+                                    </li>*@
                                 </ul>
                                 <div id="tabs-individual">
                                     @{Html.RenderAction("Singles", "Users");}
                                 </div>
-                                <div id="tabs-doubles">
+                                @*<div id="tabs-doubles">
                                     @{Html.RenderAction("Doubles", "Users");}
                                 </div>
                                 <div id="tabs-teams">
                                     <p>
                                         Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.
                                     </p>
-                                </div>
+                                </div>*@
                             </div>
                         </div>
                     </div>
@@ -100,24 +100,24 @@
                 }
             });
 
-            $('#doubles').DataTable({
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
-                            "t" +
-                            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
-                "autoWidth": true,
-                "iDisplayLength": 25,
-                "preDrawCallback": function () {
-                    if (!responsiveHelperDatatableDoub) {
-                        responsiveHelperDatatableDoub = new ResponsiveDatatablesHelper($('#doubles'), breakpointDefinition);
-                    }
-                },
-                "rowCallback": function (nRow) {
-                    responsiveHelperDatatableDoub.createExpandIcon(nRow);
-                },
-                "drawCallback": function () {
-                    responsiveHelperDatatableDoub.respond();
-                }
-            });
+            //$('#doubles').DataTable({
+            //    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
+            //                "t" +
+            //                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+            //    "autoWidth": true,
+            //    "iDisplayLength": 25,
+            //    "preDrawCallback": function () {
+            //        if (!responsiveHelperDatatableDoub) {
+            //            responsiveHelperDatatableDoub = new ResponsiveDatatablesHelper($('#doubles'), breakpointDefinition);
+            //        }
+            //    },
+            //    "rowCallback": function (nRow) {
+            //        responsiveHelperDatatableDoub.createExpandIcon(nRow);
+            //    },
+            //    "drawCallback": function () {
+            //        responsiveHelperDatatableDoub.respond();
+            //    }
+            //});
 
         });
 

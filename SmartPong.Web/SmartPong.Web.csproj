@@ -781,47 +781,25 @@
     <Content Include="sound\voice_alert.mp3" />
     <Content Include="sound\voice_off.mp3" />
     <Content Include="sound\voice_on.mp3" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ExceptionsController.cs" />
     <Compile Include="Controllers\MatchesController.cs" />
     <Compile Include="Controllers\RankingsController.cs" />
-    <Compile Include="Controllers\TeamsController.cs" />
-    <Compile Include="Controllers\TournamentsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Core\RatingFactory.cs" />
-    <Compile Include="Core\RatingsCalculator.cs" />
-    <Compile Include="Core\SmartPongContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="Helpers\ActiveDirectoryServices.cs" />
     <Compile Include="Helpers\UserPrincipalExtensions.cs" />
-    <Compile Include="Models\Match.cs" />
-    <Compile Include="Models\MatchParticipant.cs" />
-    <Compile Include="Models\MatchRating.cs" />
-    <Compile Include="Models\MatchStatus.cs" />
-    <Compile Include="Models\MatchType.cs" />
-    <Compile Include="Models\MatchUserRating.cs" />
-    <Compile Include="Models\Placement.cs" />
-    <Compile Include="Models\Rating.cs" />
-    <Compile Include="Models\RatingType.cs" />
-    <Compile Include="Models\Setting.cs" />
-    <Compile Include="Models\Team.cs" />
-    <Compile Include="Models\TeamRating.cs" />
-    <Compile Include="Models\Tournament.cs" />
-    <Compile Include="Models\TournamentMatch.cs" />
-    <Compile Include="Models\TournamentResult.cs" />
-    <Compile Include="Models\TournamentStatus.cs" />
-    <Compile Include="Models\TournamentType.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\TrueskillRating.cs" />
-    <Compile Include="Models\UserRating.cs" />
     <Compile Include="Models\View\MatchUserViewModel.cs" />
     <Compile Include="Models\View\MatchViewModel.cs" />
     <Compile Include="Models\View\UserRankingViewModel.cs" />
@@ -868,10 +846,13 @@
     <Content Include="Views\Users\_singlesRankings.cshtml" />
     <Content Include="Views\Users\_doublesRankings.cshtml" />
     <Content Include="Views\Users\Register.cshtml" />
-    <Content Include="Views\Tournaments\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\Submit.cshtml" />
     <Content Include="Views\Admin\Confirm.cshtml" />
+    <Content Include="Views\Users\Profiles.cshtml" />
+    <Content Include="Views\Matches\Pending.cshtml" />
+    <Content Include="Views\Matches\Create.cshtml" />
+    <Content Include="Views\Matches\_pendingMatches.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -883,7 +864,16 @@
     <Folder Include="App_Data\" />
     <Folder Include="img\realestate\thumbs\" />
     <Folder Include="Views\Exceptions\" />
-    <Folder Include="Views\Teams\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SmartPong.Core\SmartPong.Core.csproj">
+      <Project>{87359258-37C6-472F-BFEF-EC8DBA9490FA}</Project>
+      <Name>SmartPong.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartPong.Domain\SmartPong.Domain.csproj">
+      <Project>{F0703AEE-F55D-4E60-BC5F-9CFE52FCAEE0}</Project>
+      <Name>SmartPong.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

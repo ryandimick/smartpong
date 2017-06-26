@@ -1,0 +1,13 @@
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\obj\Release\SmartPong.Core.csprojResolveAssemblyReference.cache
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Core.dll.config
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Core.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Core.pdb
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\EntityFramework.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Domain.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Domain.pdb
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\EntityFramework.xml
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\obj\Release\SmartPong.Core.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\obj\Release\SmartPong.Core.pdb
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\Moserware.Skills.dll

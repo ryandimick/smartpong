@@ -1,0 +1,13 @@
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\bin\Release\ConsoleApplication1.exe.config
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\bin\Release\ConsoleApplication1.exe
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\bin\Release\ConsoleApplication1.pdb
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\bin\Release\SmartPong.Core.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\bin\Release\SmartPong.Domain.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\bin\Release\Moserware.Skills.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\bin\Release\EntityFramework.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\bin\Release\SmartPong.Core.pdb
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\bin\Release\SmartPong.Domain.pdb
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\bin\Release\EntityFramework.xml
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\obj\Release\ConsoleApplication1.csprojResolveAssemblyReference.cache
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\obj\Release\ConsoleApplication1.exe
+C:\Users\rdimick\Source\Repos\smartpong\SmaPong\ConsoleApplication1\obj\Release\ConsoleApplication1.pdb

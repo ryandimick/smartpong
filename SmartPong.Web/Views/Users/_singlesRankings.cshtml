@@ -18,7 +18,7 @@
         {
             <tr>
                 <td>@ranking.ToString()</td>
-                <td>@Html.ActionLink(item.DisplayName, "Profile", "Users", new { id = item.UserId }, null)</td>
+                <td>@Html.ActionLink(item.DisplayName, "Profiles", "Users", new { id = item.UserId }, null)</td>
                 <td>@string.Format("{0:0.000}", item.Rating)</td>
                 <td>@string.Format("{0:0.000}", item.Skill)</td>
                 <td>@string.Format("{0:0.000}", item.Variance)</td>

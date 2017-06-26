@@ -1,0 +1,10 @@
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Debug\SmartPong.Core.dll.config
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Debug\SmartPong.Core.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Debug\SmartPong.Core.pdb
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Debug\SmartPong.Domain.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Debug\SmartPong.Domain.pdb
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Debug\EntityFramework.xml
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\obj\Debug\SmartPong.Core.csprojResolveAssemblyReference.cache
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\obj\Debug\SmartPong.Core.dll
+C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\obj\Debug\SmartPong.Core.pdb

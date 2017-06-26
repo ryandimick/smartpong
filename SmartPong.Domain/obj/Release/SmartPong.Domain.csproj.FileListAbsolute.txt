@@ -5,6 +5,5 @@ C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Domain\bin\Release\EntityFrame
 C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Domain\bin\Release\EntityFramework.SqlServer.dll
 C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Domain\bin\Release\EntityFramework.xml
 C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Domain\bin\Release\EntityFramework.SqlServer.xml
-C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.csprojResolveAssemblyReference.cache
 C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.dll
 C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.pdb
