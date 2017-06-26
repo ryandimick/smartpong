@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SmartPong.Models;
 
 namespace SmartPong
@@ -98,6 +99,37 @@ namespace SmartPong
 
         /// <summary>
         /// 
+        /// Returns all matches.
+        /// 
+        /// </summary>
+        /// 
+        /// <returns>The collection of matches.</returns>
+        IEnumerable<Match> RetrieveMatches();
+
+        /// <summary>
+        /// 
+        /// Returns all matches that meet criteria.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="predicate">The criteria a match must meet.</param>
+        /// 
+        /// <returns>The collection of matches.</returns>
+        IEnumerable<Match> RetrieveMatches(Func<Match, bool> predicate);
+
+        /// <summary>
+        /// 
+        /// Returns all user ratings for a specified rating type.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="typeId">The unique identifier of the rating type.</param>
+        /// 
+        /// <returns>The collection of user ratings.</returns>
+        IEnumerable<UserRating> RetrieveUserRatings(int typeId);
+
+        /// <summary>
+        /// 
         /// Returns all settings.
         /// 
         /// </summary>
@@ -126,6 +158,17 @@ namespace SmartPong
         /// 
         /// <returns>The requested user.</returns>
         User RetrieveUser(string username);
+
+        /// <summary>
+        /// 
+        /// Returns all users that meet the specified criteria.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="predicate">The criteria a user must mee.</param>
+        /// 
+        /// <returns>The collection of users.</returns>
+        IEnumerable<User> RetrieveUsers(Func<User, bool> predicate);
 
         /// <summary>
         /// 
