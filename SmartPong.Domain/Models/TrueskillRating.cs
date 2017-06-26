@@ -1,4 +1,6 @@
-﻿namespace SmartPong.Models
+﻿using Moserware.Skills;
+
+namespace SmartPong.Models
 {
     /// <summary>
     /// 
@@ -27,5 +29,22 @@
         /// 
         /// </summary>
         public double Rating => Skill - (3 * Variance);
+
+        /// <summary>
+        /// 
+        /// The default Trueskill rating all new entities will be assigned.
+        /// 
+        /// </summary>
+        public static TrueskillRating Default
+        {
+            get
+            {
+                return new TrueskillRating
+                {
+                    Skill = GameInfo.DefaultGameInfo.DefaultRating.Mean,
+                    Variance = GameInfo.DefaultGameInfo.DefaultRating.StandardDeviation
+                };
+            }
+        }
     }
 }

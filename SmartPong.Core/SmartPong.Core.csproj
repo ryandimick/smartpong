@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultUserRatings.cs" />
     <Compile Include="ISmartPongRepository.cs" />
     <Compile Include="MatchExtensions.cs" />
     <Compile Include="MatchManager.cs" />

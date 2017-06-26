@@ -50,31 +50,7 @@ namespace SmartPong
                 CreateDate = DateTime.Now
             };
 
-            /* TODO:
-            * Generate default ratings the right way.
-            */
-
-            var trueSkillDefault = new TrueskillRating
-            {
-                Skill = GameInfo.DefaultGameInfo.DefaultRating.Mean,
-                Variance = GameInfo.DefaultGameInfo.DefaultRating.Mean
-            };
-
-            var trueSkillData = new JavaScriptSerializer().Serialize(trueSkillDefault);
-
-            newUser.UserRatings = new List<UserRating>
-            {
-                new UserRating
-                {
-                    RatingTypeId = 1,
-                    RatingData = trueSkillData
-                },
-                new UserRating
-                {
-                    RatingTypeId = 2,
-                    RatingData = trueSkillData
-                }
-            };
+            newUser.UserRatings = DefaultUserRatings.Generate();
 
             _context.Users.Add(newUser);
             _context.SaveChanges();
