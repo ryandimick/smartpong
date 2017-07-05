@@ -5,6 +5,7 @@ using System.Linq;
 using Moserware.Skills;
 using SmartPong.Models;
 using System.Web.Script.Serialization;
+using SmartPong.Exceptions;
 
 namespace SmartPong
 {
@@ -39,6 +40,9 @@ namespace SmartPong
 
         internal User CreateUser(string username, string givenName, string surname, string email, string nickname)
         {
+            if ((RetrieveUsers(u => string.Equals(u.Username, username, StringComparison.CurrentCultureIgnoreCase)).Any()))//u.Username.Equals(username , u.Username)) != null)
+                throw new Exception("User Already Created!");
+
             var newUser = new User
             {
                 Username = username,

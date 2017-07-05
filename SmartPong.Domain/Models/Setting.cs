@@ -16,7 +16,7 @@ namespace SmartPong.Models
         /// </summary>
         [Key]
         [MaxLength(20)]
-        public string Key { get; set; }
+        public string KeyName { get; set; }
 
         /// <summary>
         /// 
@@ -24,6 +24,6 @@ namespace SmartPong.Models
         /// 
         /// </summary>
         [Required]
-        public string Value { get; set; }
+        public string KeyValue { get; set; }
     }
 }
