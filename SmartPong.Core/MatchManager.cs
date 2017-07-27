@@ -4,7 +4,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web.Script.Serialization;
 using Moserware.Skills;
-using SmartPong.Exceptions;
 using SmartPong.Models;
 
 namespace SmartPong
@@ -77,20 +76,7 @@ namespace SmartPong
 
         internal Match CreateMatch(Match newMatch)
         {
-            if (newMatch.MatchDate == null)
-            {
-                throw new InvalidMatchException("Match Date cannot be null!");
-            }
-
-            if (newMatch.MatchParticipants == null || newMatch.MatchParticipants.Count < 2)
-            {
-                throw new InvalidMatchException("Insufficient match participants provided!");
-            }
-
-            if (newMatch.WinningTeam == null)
-            {
-                throw new InvalidMatchException("The match winning team cannot be null!");
-            }
+            newMatch.ValidateInput();
 
             newMatch.CreateDate = DateTime.Now;
             newMatch.Status = (int)MatchStatus.Type.Submitted;

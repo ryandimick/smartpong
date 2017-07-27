@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using Moserware.Skills;
 using SmartPong.Models;
-using System.Web.Script.Serialization;
+using SmartPong.Ratings;
 
 namespace SmartPong
 {
