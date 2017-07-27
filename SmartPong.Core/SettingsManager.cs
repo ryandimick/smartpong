@@ -20,7 +20,8 @@ namespace SmartPong
 
         internal Setting UpdateSetting(Setting updatedSetting)
         {
-            var currentSetting = _context.Settings.First(s => s.Key == updatedSetting.Key);
+            var currentSetting = _context.Settings.First(s => s.KeyName == updatedSetting.KeyName);
+            //todo: this was changed from Key to KeyName to match the database fields. (Marcos)
             _context.Entry(currentSetting).CurrentValues.SetValues(updatedSetting);
             _context.SaveChanges();
             return updatedSetting;

@@ -1,4 +1,5 @@
-﻿using SmartPong.Helpers;
+﻿using System;
+using SmartPong.Helpers;
 using SmartPong.Models;
 using SmartPong.Models.View;
 using System.Web.Mvc;
@@ -18,7 +19,7 @@ namespace SmartPong.Controllers
         //}
 
         public PartialViewResult Singles()
-        { 
+        {
             var userRatings = Global.Repository.RetrieveUserRatings(UserRatingType.TrueskillSingles);
             var viewModels = UserRankingViewModel.Generate(userRatings);
             return PartialView("_singlesRankings", viewModels);
@@ -35,13 +36,21 @@ namespace SmartPong.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register([Bind(Include = "Username, GivenName, Surname, Nickname, Email, Notifications")] User user)
         {
-            if (ModelState.IsValid)
+            try
             {
-                Global.Repository.CreateUser(user.Username, user.GivenName, user.Surname, user.Email, user.Nickname);
+                if (ModelState.IsValid)
+                {
+                    Global.Repository.CreateUser(user.Username, user.GivenName, user.Surname, user.Email, user.Nickname);
 
-                return RedirectToAction("Index", "Rankings");
+                    return RedirectToAction("Index", "Rankings");
+                }
+                return View(user);
             }
-            return View(user);
+            catch (Exception e)
+            {
+                return Json(new {message = e.Message});
+            }
+
         }
 
         public ActionResult Profiles(int? userId)
