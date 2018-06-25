@@ -3,6 +3,8 @@ using SmartPong.Helpers;
 using SmartPong.Models;
 using SmartPong.Models.View;
 using System.Web.Mvc;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 
 namespace SmartPong.Controllers
 {
@@ -18,11 +20,13 @@ namespace SmartPong.Controllers
         //    return PartialView("_doublesRankings", viewModels);
         //}
 
-        public PartialViewResult Singles()
+        public ActionResult Singles([DataSourceRequest] DataSourceRequest request)
         {
             var userRatings = Global.Repository.RetrieveUserRatings(UserRatingType.TrueskillSingles);
             var viewModels = UserRankingViewModel.Generate(userRatings);
-            return PartialView("_singlesRankings", viewModels);
+            return Json(viewModels.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+
+           // return PartialView("_singlesRankings", viewModels);
         }
 
         public ActionResult Register()

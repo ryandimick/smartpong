@@ -1,4 +1,7 @@
-﻿@model IEnumerable<SmartPong.Models.Match>
+﻿@using Kendo.Mvc.UI
+@using SmartPong.Models.View
+@model IEnumerable<SmartPong.Models.Match>
+
 
 @{
     ViewBag.Title = "Match History";
@@ -16,59 +19,112 @@
                     <div>
                         <div class="widget-body no-padding">
 
-                            <table id="matches" class="table table-striped table-bordered table-hover" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Match Date</th>
-                                        <th>Winner</th>
-                                        <th>Loser</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
+                            @(Html.Kendo().Grid<MatchGridViewModel>()
+                        .Name("grdMatch")
+                        .Events(events =>
+                        {
+                            //events.DataBound("dataBound");
+                            //events.Change("onChange");
+                        })
+                        .Filterable(filterable => filterable.Mode(GridFilterMode.Row))
+                        .Resizable(resize => resize.Columns(true))
+                        .Reorderable(reorder => reorder.Columns(true))
+                        .Scrollable(s => s.Virtual(true).Height("auto"))
+                        .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                        .Sortable(sortable => sortable.AllowUnsort(true).SortMode(GridSortMode.MultipleColumn))
+                        .Columns(c =>
+                        {
+                            c.Bound(p => p.MatchId).HeaderHtmlAttributes(new { style = "text-align: center" });
+                            //.Filterable(f => f.Cell(cell =>
+                            //{
+                            //    cell.ShowOperators(false);
+                            //    cell.Operator("contains");
+                            //    // cell.Template("onFilterKeyDown");
+                            //}))
+                            c.Bound(p => p.MatchType).HtmlAttributes(new { style = "text-align: center" })
+                                .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                            c.Bound(p => p.MatchDate).HtmlAttributes(new { style = "text-align: center" }).ClientTemplate("#= kendo.toString(MatchDate, \"MM/dd/yyyy HH:mm \") #")
+                                .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                            c.Bound(p => p.WinnerOne).HtmlAttributes(new { style = "text-align: center" })
+                            .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                            c.Bound(p => p.LoserOne).HtmlAttributes(new { style = "text-align: center" })
+                                    .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                            c.Bound(p => p.StatusText).HtmlAttributes(new { style = "text-align: center" })
+                                .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                        })
+                        .ToolBar(toolbar =>
+                        {
+                            toolbar.Custom().Name("create").Text("<div id=\"spinnerContainerMain\" class=\"spinner\"></div><i class=\"fa fa-plus fa-lg\"></i>" + "Add").Url("#").HtmlAttributes(new { onclick = "onCreate()" });
+                            //toolbar.Custom().Name("edit").Text("<i class=\"fa fa-pencil-square-o fa-lg\"></i>" + "Edit").Url("#").HtmlAttributes(new { onclick = "onEdit()" });
+                            toolbar.Custom().Name("delete").Text("<i class=\"fa fa-times fa-2x\" style=\" \"></i>" + "Delete").Url("#").HtmlAttributes(new { onclick = "deleteRecords()", id = "delete" });
+                        })
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(10)
+                            .Model(model =>
+                            {
+                                model.Id(p => p.MatchId);
+                                model.Field(p => p.MatchDate);
+                                model.Field(p => p.Loser);
+                                model.Field(p => p.Winner);
+                                model.Field(p => p.Status);
+                            })
+                            .Read(read => read.Action("Read_Matches", "Matches"))
+                        ))
+
+                            @*<table id="matches" class="table table-striped table-bordered table-hover" width="100%">
+                                    <thead>
                                         <tr>
-                                            <td>@Html.DisplayFor(modelItem => item.MatchId)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.MatchDate)</td>
-                                            <td>
-                                                @{
-                                                    var winners = item.MatchParticipants.Where(mp => mp.MatchTeamId == item.WinningTeam.Value);
-                                                    if (winners.Count() == 1)
-                                                    {
-                                                        var winner = winners.First().User;
-                                                        @Html.ActionLink(winner.DisplayName, "Profiles", "Users", new {id = winner.UserId}, null)
-                                                    }
-                                                    else if (winners.Count() == 2)
-                                                    {
-                                                        @Html.ActionLink(winners.ElementAt(0).User.DisplayName, "Profiles", "Users", new {id = winners.ElementAt(0).User.UserId}, null)
-                                                        <span> and </span>
-                                                        @Html.ActionLink(winners.ElementAt(1).User.DisplayName, "Profiles", "Users", new {id = winners.ElementAt(1).User.UserId}, null)
-                                                    }
-                                                }
-                                            </td>
-                                            <td>
-                                                @{
-                                                    var losers = item.MatchParticipants.Where(mp => mp.MatchTeamId != item.WinningTeam.Value);
-                                                    if (losers.Count() == 1)
-                                                    {
-                                                        var loser = losers.First().User;
-                                                        @Html.ActionLink(loser.DisplayName, "Profiles", "Users", new { id = loser.UserId }, null)
-                                                    }
-                                                    else if (losers.Count() == 2)
-                                                    {
-                                                        @Html.ActionLink(losers.ElementAt(0).User.DisplayName, "Profiles", "Users", new { id = losers.ElementAt(0).User.UserId }, null)
-                                                        <span> and </span>
-                                                        @Html.ActionLink(losers.ElementAt(1).User.DisplayName, "Profiles", "Users", new { id = losers.ElementAt(1).User.UserId }, null)
-                                                    }
-                                                }
-                                            </td>
-                                            <td>@Html.DisplayFor(modelItem => item.MatchStatus.Description)</td>
+                                            <th>Id</th>
+                                            <th>Match Date</th>
+                                            <th>Winner</th>
+                                            <th>Loser</th>
+                                            <th>Status</th>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@Html.DisplayFor(modelItem => item.MatchId)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.MatchDate)</td>
+                                                <td>
+                                                    @{
+                                                        var winners = item.MatchParticipants.Where(mp => mp.MatchTeamId == item.WinningTeam.Value);
+                                                        if (winners.Count() == 1)
+                                                        {
+                                                            var winner = winners.First().User;
+                                                            @Html.ActionLink(winner.DisplayName, "Profiles", "Users", new { id = winner.UserId }, null)
+                                                        }
+                                                        else if (winners.Count() == 2)
+                                                        {
+                                                            @Html.ActionLink(winners.ElementAt(0).User.DisplayName, "Profiles", "Users", new { id = winners.ElementAt(0).User.UserId }, null)
+                                                            <span> and </span>
+                                                            @Html.ActionLink(winners.ElementAt(1).User.DisplayName, "Profiles", "Users", new { id = winners.ElementAt(1).User.UserId }, null)
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        var losers = item.MatchParticipants.Where(mp => mp.MatchTeamId != item.WinningTeam.Value);
+                                                        if (losers.Count() == 1)
+                                                        {
+                                                            var loser = losers.First().User;
+                                                            @Html.ActionLink(loser.DisplayName, "Profiles", "Users", new { id = loser.UserId }, null)
+                                                        }
+                                                        else if (losers.Count() == 2)
+                                                        {
+                                                            @Html.ActionLink(losers.ElementAt(0).User.DisplayName, "Profiles", "Users", new { id = losers.ElementAt(0).User.UserId }, null)
+                                                            <span> and </span>
+                                                            @Html.ActionLink(losers.ElementAt(1).User.DisplayName, "Profiles", "Users", new { id = losers.ElementAt(1).User.UserId }, null)
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>@Html.DisplayFor(modelItem => item.MatchStatus.Description)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>*@
 
                         </div>
                     </div>
@@ -79,59 +135,60 @@
 </div>
 
 
-@section pagespecific {
+@*@section pagespecific {
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script>
-        if (!window.jQuery) {
-            document.write('<script src="/js/libs/jquery-2.1.1.min.js"><\/script>');
-        }
-    </script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script>
+            if (!window.jQuery) {
+                document.write('<script src="/js/libs/jquery-2.1.1.min.js"><\/script>');
+            }
+        </script>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <script>
-        if (!window.jQuery.ui) {
-            document.write('<script src="/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
-        }
-    </script>
-    <script src="/js/plugin/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js/plugin/datatables/dataTables.colVis.min.js"></script>
-    <script src="/js/plugin/datatables/dataTables.tableTools.min.js"></script>
-    <script src="/js/plugin/datatables/dataTables.bootstrap.min.js"></script>
-    <script src="/js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+        <script>
+            if (!window.jQuery.ui) {
+                document.write('<script src="/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+            }
+        </script>
+        <script src="/js/plugin/datatables/jquery.dataTables.min.js"></script>
+        <script src="/js/plugin/datatables/dataTables.colVis.min.js"></script>
+        <script src="/js/plugin/datatables/dataTables.tableTools.min.js"></script>
+        <script src="/js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+        <script src="/js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
 
-    <script type="text/javascript">
+        <script type="text/javascript">//todo -- left hereee. convert to kendo grid.. try to see if error for .gif appears here
 
-        $(document).ready(function () {
 
-            var breakpointDefinition = {
-                tablet: 1024,
-                phone: 480
-            };
+            $(document).ready(function () {
 
-            var responsiveHelperDatatable = undefined;
+                var breakpointDefinition = {
+                    tablet: 1024,
+                    phone: 480
+                };
 
-            $('#matches').DataTable({
-                "bSort": false,
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
-                            "t" +
-                            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
-                "autoWidth": true,
-                "iDisplayLength": 25,
-                "preDrawCallback": function () {
-                    if (!responsiveHelperDatatable) {
-                        responsiveHelperDatatable = new ResponsiveDatatablesHelper($('#matches'), breakpointDefinition);
+                var responsiveHelperDatatable = undefined;
+
+                $('#matches').DataTable({
+                    "bSort": false,
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
+                                "t" +
+                                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+                    "autoWidth": true,
+                    "iDisplayLength": 25,
+                    "preDrawCallback": function () {
+                        if (!responsiveHelperDatatable) {
+                            responsiveHelperDatatable = new ResponsiveDatatablesHelper($('#matches'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback": function (nRow) {
+                        responsiveHelperDatatable.createExpandIcon(nRow);
+                    },
+                    "drawCallback": function () {
+                        responsiveHelperDatatable.respond();
                     }
-                },
-                "rowCallback": function (nRow) {
-                    responsiveHelperDatatable.createExpandIcon(nRow);
-                },
-                "drawCallback": function () {
-                    responsiveHelperDatatable.respond();
-                }
+                });
+
             });
 
-        });
-
-    </script>
-}
+        </script>
+    }*@

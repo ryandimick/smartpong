@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using SmartPong.Models;
+using SmartPong.Models.View;
 
 namespace SmartPong.Controllers
 {
@@ -10,8 +13,15 @@ namespace SmartPong.Controllers
     {
         public ActionResult Index()
         {
-            var matches = Global.Repository.RetrieveMatches(m => m.Status >= 2).OrderByDescending(m => m.MatchDate);
-            return View(matches);
+            //var matches = Global.Repository.RetrieveMatches(m => m.Status >= 2).OrderByDescending(m => m.MatchDate);
+            return View(); //matches);
+        }
+
+        public ActionResult Read_Matches([DataSourceRequest] DataSourceRequest request)
+        {
+            var matches = Global.Repository.RetrieveMatches(m => m.Status >= 2).ToGridViewModel()
+                .OrderByDescending(m => m.MatchDate);
+            return Json(matches.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
         public PartialViewResult Confirm()

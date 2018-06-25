@@ -1,4 +1,7 @@
-﻿
+﻿@using System.Web.Optimization
+@using Kendo.Mvc.UI
+@using SmartPong.Models.View
+
 @{
     ViewBag.Title = "Rankings";
 }
@@ -14,30 +17,75 @@
                     </header>
                     <div>
                         <div class="widget-body no-padding">
-                            <div id="tabs">
-                                <ul>
-                                    <li>
-                                        <a href="#tabs-individual">Individual</a>
-                                    </li>
-                                    @*<li>
-                                        <a href="#tabs-doubles">Doubles</a>
-                                    </li>
-                                    <li>
-                                        <a href="#tabs-teams">Teams</a>
-                                    </li>*@
-                                </ul>
-                                <div id="tabs-individual">
-                                    @{Html.RenderAction("Singles", "Users");}
-                                </div>
-                                @*<div id="tabs-doubles">
-                                    @{Html.RenderAction("Doubles", "Users");}
-                                </div>
-                                <div id="tabs-teams">
-                                    <p>
-                                        Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.
-                                    </p>
+
+                            @(Html.Kendo().Grid<UserRankingViewModel>()
+                                                  .Name("grdRoles")
+                                                  .Events(events =>
+                                                  {
+                                                                  //events.DataBound("dataBound");
+                                                                  //events.Change("onChange");
+                                                              })
+                                                  .Filterable(filterable => filterable.Mode(GridFilterMode.Row))
+                                                  .Resizable(resize => resize.Columns(true))
+                                                  .Reorderable(reorder => reorder.Columns(true))
+                                                  .Scrollable(s => s.Virtual(true).Height("auto"))
+                                                  .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                  .Sortable(sortable => sortable.AllowUnsort(true).SortMode(GridSortMode.MultipleColumn))
+                                                  .Columns(c =>
+                                                  {
+                                                      c.Bound(p => p.DisplayName).Filterable(f => f.Cell(cell =>
+                                                      {
+                                                          cell.ShowOperators(false);
+                                                          cell.Operator("contains");
+                                                                      // cell.Template("onFilterKeyDown");
+                                                                  })).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                                      c.Bound(p => p.Rating).HtmlAttributes(new { style = "text-align: center" })
+                                                          .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                                      c.Bound(p => p.ActivityDate).HtmlAttributes(new { style = "text-align: center" }).ClientTemplate("#= kendo.toString(ActivityDate, \"MM/dd/yyyy HH:mm \") #")
+                                                          .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                                      c.Bound(p => p.Skill).HtmlAttributes(new { style = "text-align: center" })
+                                                          .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                                      c.Bound(p => p.Variance).Title("Variance").HtmlAttributes(new { style = "text-align: center" })
+                                                          .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                                  })
+                                                  .DataSource(dataSource => dataSource
+                                                      .Ajax()
+                                                      .PageSize(5)
+                                                      .Model(model =>
+                                                      {
+                                                          model.Id(p => p.UserId);
+                                                          model.Field(p => p.Rank);
+                                                      })
+                                                      .Read(read => read.Action("Singles", "Users"))
+                                                  ))
+                            @*TODO: Old format for the grid code*@
+                            @*<div id="tabs">
+                                    <ul>
+                                        <li>
+                                            <a href="#tabs-individual">Individual</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tabs-doubles">Doubles</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tabs-teams">Teams</a>
+                                        </li>
+                                    </ul>
+                                    <div id="tabs-individual">
+                                        @{Html.RenderAction("Singles", "Users");}
+                                    </div>
+                                    <div id="tabs-doubles">
+                                        @{Html.RenderAction("Doubles", "Users");}
+                                    </div>
+                                    <div id="tabs-teams">
+                                        <p>
+                                            Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.
+                                        </p>
+                                    </div>
                                 </div>*@
-                            </div>
+                            @*TODO:End of old code.*@
+
+
                         </div>
                     </div>
                 </div>
@@ -46,8 +94,119 @@
     </section>
 </div>
 
-@section pagespecific {
+<div id="content">
+    <section id="widget-chart" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-bar-chart"></i> </span>
+                        <h2>Ranking Charts</h2>
+                    </header>
+                    <div>
+                        <section id="profile" class="well">
+                            <div class="row">
+                                <div class="form-horizontal form-widgets col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class=" col-md-5 col-md-offset-1 ">
+                                                <div class="widget-body no-padding form-horizontal">
+                                                    @(Html.Kendo().Chart()
+                                                        .Name("chart")
+                                                        .Title("Market Value of Major Banks")
+                                                        .Legend(legend => legend
+                                                            .Position(ChartLegendPosition.Bottom)
+                                                        )
+                                                        .SeriesDefaults(seriesDefaults => seriesDefaults.RadarLine().Style(ChartRadarLineStyle.Smooth))
+                                                        .Series(series =>
+                                                        {
+                                                            series.RadarLine(new double[]
+                                                            {
+                                                                116, 165, 215, 75, 100, 49, 80,
+                                                                116, 108, 90, 67, 76, 91, 255, 120
+                                                            })
+                                                                .Name("Market value as of 2007");
 
+                                                            series.RadarLine(new double[]
+                                                            {
+                                                                64, 85, 97, 27, 16, 26, 35,
+                                                                32, 26, 17, 10, 7, 19, 5
+                                                            })
+                                                                .Name("Market value as of 2009");
+                                                        })
+                                                        .CategoryAxis(axis => axis
+                                                            .Categories("Santander", "JP Morgan", "HSBC", "Credit Suisse",
+                                                                "Goldman Sachs", "Morgan Stanley", "Societe Generale", "UBS",
+                                                                "BNP Paribas", "Unicredit", "Credit Agricole", "Deutsche Bank",
+                                                                "Barclays", "Citigroup", "RBS")
+                                                        )
+                                                        .ValueAxis(axis => axis
+                                                            .Numeric()
+                                                            .Labels(labels => labels.Format("${0}"))
+                                                        )
+                                                        .Tooltip(tooltip => tooltip
+                                                            .Visible(true)
+                                                            .Format("${0} bln")
+                                                        ))
+                                                </div>
+                                            </div>
+                                            <div class=" col-md-5 ">@*col-md-offset-1*@
+                                            <div class="widget-body no-padding">
+                                                @(Html.Kendo().Chart()
+                                                .Name("PieChart")
+                                                .Title(title => title
+                                                    .Text("Share of Internet Population Growth, 2007 - 2012")
+                                                    .Position(ChartTitlePosition.Bottom))
+                                                .Legend(legend => legend
+                                                    .Visible(false)
+                                                )
+                                                .ChartArea(chart => chart
+                                                    .Background("transparent")
+                                                )
+                                                //.HtmlAttributes(new { style = "background: center no-repeat url(" + @Url.Content("~/Content/shared/world-map.png") })
+                                                .Series(series =>
+                                                {
+                                                    series.Pie(new dynamic[]
+                                                    {
+                                                        new {category = "Asia", value = 53.8, color = "#9de219"},
+                                                        new {category = "Europe", value = 16.1, color = "#90cc38"},
+                                                        new {category = "LatinAmerica", value = 11.3, color = "#068c35"},
+                                                        new {category = "Africa", value = 9.6, color = "#006634"},
+                                                        new {category = "MiddleEast", value = 5.2, color = "#004d38"},
+                                                        new {category = "NorthAmerica", value = 3.6, color = "#033939"}
+                                                    })
+                                                        .Labels(labels => labels
+                                                            .Template("#= category #: \n #= value#%")
+                                                            .Background("transparent")
+                                                            .Visible(true)
+                                                        )
+                                                        .StartAngle(150);
+                                                })
+                                                .Tooltip(tooltip => tooltip
+                                                    .Visible(true)
+                                                    .Format("{0}%")))
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+</div>
+
+
+<script>
+
+</script>
+
+@*@section pagespecific {*@
+@*@Styles.Render("~/css/kendo")
+    @Scripts.Render("~/bundles/kendo")
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script>
         if (!window.jQuery) {
@@ -83,8 +242,8 @@
 
             $('#individual').DataTable({
                 "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
-                            "t" +
-                            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+                    "t" +
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
                 "autoWidth": true,
                 "iDisplayLength": 25,
                 "preDrawCallback": function () {
@@ -121,5 +280,5 @@
 
         });
 
-    </script>
-}
+    </script>*@
+@*}*@

@@ -11,3 +11,14 @@ C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\EntityFramewo
 C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\obj\Release\SmartPong.Core.dll
 C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\obj\Release\SmartPong.Core.pdb
 C:\Users\rdimick\Source\Repos\smartpong\SmartPong.Core\bin\Release\Moserware.Skills.dll
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Core.dll.config
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Core.dll
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Core.pdb
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Domain.dll
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Domain.pdb
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\bin\Release\SmartPong.Domain.dll.config
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\bin\Release\EntityFramework.xml
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\obj\Release\SmartPong.Core.csprojResolveAssemblyReference.cache
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\obj\Release\SmartPong.Core.dll
+C:\Users\mletona\Source\Repos\smartpong\SmartPong.Core\obj\Release\SmartPong.Core.pdb

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
 <html lang="en-us">
 <head>
     <meta charset="utf-8">
@@ -48,6 +49,28 @@
     <link rel="apple-touch-startup-image" href="/img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
     <link rel="apple-touch-startup-image" href="/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
 
+    <!-- Kendo Files needed on page load (Scripts and CSS) -->
+    @*<link href="@Url.Content("~/Content/kendo/2018.1.117/kendo.common-bootstrap.min.css")" rel="stylesheet" type="text/css" />*@
+    <link href="@Url.Content("~/Content/kendo/2018.1.117/kendo.common-material.min.css")" rel="stylesheet" type="text/css" />
+
+    <link href="@Url.Content("~/Content/kendo/2018.1.117/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+
+    <link href="@Url.Content("~/Content/kendo/2018.1.117/kendo.material.min.css")" rel="stylesheet" type="text/css" />
+
+    @*<link href="@Url.Content("~/Content/kendo/2018.1.117/kendo.bootstrap.min.css")" rel="stylesheet" type="text/css" />*@
+    <script src="@Url.Content("~/Script/kendo/2018.1.117/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Script/kendo/2018.1.117/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Script/kendo/2018.1.117/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Script/kendo/2018.1.117/kendo.aspnetmvc.min.js")"></script>
+    <script src="@Url.Content("~/Script/kendo.modernizr.custom.js")"></script>
+    @*<link href="@Url.Content("~/Content/kendo/2018.1.117/fonts/glyphs/WebComponentsIcons.ttf?gedxeo")" rel="application/octet-stream" type="text/css" />*@
+    @*@Styles.Render("~/img/load")*@
+
+    @*@Styles.Render("~/css/bootstrap")*@ @*TO DELETE IN BUNDLE CONFIG*@
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Script/js/skin")
+    @RenderSection("pagespecific", required: false)
 </head>
 <body class="minified">
     <header id="header">
@@ -131,10 +154,14 @@
             </div>
         </div>
     </div>
-
+    
+    
+    @Scripts.Render("~/js/smartadmin")
+    @*@Styles.Render("css/kendo")*@
+    @Scripts.Render("bundles/kendo")
 
     <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    @*<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
     <script>
         if (!window.jQuery) {
             document.write('<script src="/js/libs/jquery-2.1.1.min.js"><\/script>');
@@ -142,20 +169,21 @@
     </script>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <script>
-        if (!window.jQuery.ui) {
-            document.write('<script src="/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
-        }
-    </script>
+<script>
+    if (!window.jQuery.ui) {
+        document.write('<script src="/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+    }
+</script>
+
 
     <!-- IMPORTANT: APP CONFIG -->
     <script src="/js/app.config.js"></script>
-
+    
     <!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
     <script src="/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
 
     <!-- BOOTSTRAP JS -->
-    <script src="/js/bootstrap/bootstrap.min.js"></script>
+    @*<script src="/js/bootstrap/bootstrap.min.js"></script>*@
 
     <!-- JARVIS WIDGETS -->
     <script src="/js/smartwidgets/jarvis.widget.min.js"></script>
