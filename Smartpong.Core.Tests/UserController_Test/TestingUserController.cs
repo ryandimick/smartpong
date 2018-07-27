@@ -15,33 +15,33 @@ namespace Smartpong.Core.Tests.UserController_Test
     public class TestingUserController
     {
 
-        //public ISmartPongRepository GetRepository()
-        //{
-        //    ISmartPongRepository repository = RepositoryManager.Create("server = MLETONA1; database = SmartPong; User Id = sa; Password = opconxps;");
-        //    return repository;
-        //}
+        public ISmartPongRepository GetRepository()
+        {
+            ISmartPongRepository repository = RepositoryManager.Create(@"server = MLETONA\SQLEXPRESS; database = SmartPong; User Id = sa; Password = opconxps;");
+            return repository;
+        }
 
-        //[Test]
-        //public void When_Retrieving_Matches()
-        //{
-        //    var listOfMatches = GetRepository().RetrieveMatches();
+        [Test]
+        public void When_Retrieving_Matches()
+        {
+            var listOfMatches = GetRepository().RetrieveMatches();
 
-        //    NUnit.Framework.CollectionAssert.AllItemsAreNotNull(listOfMatches);
-        //}
+            NUnit.Framework.CollectionAssert.AllItemsAreNotNull(listOfMatches);
+        }
 
-        //[Test]
-        //public void When_Retrieving_Settings()
-        //{
-        //    var listOfSettings = GetRepository().RetrieveSettings();
+        [Test]
+        public void When_Retrieving_Settings()
+        {
+            var listOfSettings = GetRepository().RetrieveSettings();
 
-        //    NUnit.Framework.CollectionAssert.AllItemsAreNotNull(listOfSettings);
-        //}
+            NUnit.Framework.CollectionAssert.AllItemsAreNotNull(listOfSettings);
+        }
 
         //[Test]
         //public void When_Retrieving_UserRatings()
         //{
         //    var userRatings = GetRepository().RetrieveUserRatings(UserRatingType.TrueskillSingles);
-            
+
         //    NUnit.Framework.CollectionAssert.IsNotEmpty(userRatings);
         //}
 
@@ -162,35 +162,35 @@ namespace Smartpong.Core.Tests.UserController_Test
         //}
 
 
-        //[Test]
-        //public void When_Updating_User_Rating()
-        //{
-        //    var submitterRating = GetRepository().RetrieveUserRatings(UserRatingType.TrueskillSingles).First(u => u.UserId == 9);
-        //    var opponentRating = GetRepository().RetrieveUserRatings(UserRatingType.TrueskillSingles).First(u => u.UserId == 11);
-        //    var subAndOppRatings = new JavaScriptSerializer();
-        //    var subStartRating = subAndOppRatings.Deserialize<TrueskillRating>(submitterRating.RatingData);
-        //    var oppStartRating = subAndOppRatings.Deserialize<TrueskillRating>(opponentRating.RatingData);
+        [Test]
+        public void When_Updating_User_Rating()
+        {
+            var submitterRating = GetRepository().RetrieveUserRatings(UserRatingType.TrueskillSingles).First(u => u.UserId == 9);
+            var opponentRating = GetRepository().RetrieveUserRatings(UserRatingType.TrueskillSingles).First(u => u.UserId == 11);
+            var subAndOppRatings = new JavaScriptSerializer();
+            var subStartRating = subAndOppRatings.Deserialize<TrueskillRating>(submitterRating.RatingData);
+            var oppStartRating = subAndOppRatings.Deserialize<TrueskillRating>(opponentRating.RatingData);
 
-        //    var scorePlayerOne = 21;
-        //    var scorePlayerTwo = 15;
-        //    var submitter = GetRepository().RetrieveUser(9);
-        //    var opponent = GetRepository().RetrieveUser(11);
-
-
-        //    var match = new Match(MatchType.Type.Singles, DateTime.Now);
-        //    match.AddTeam(1, new List<User> { submitter });
-        //    match.AddTeam(2, new List<User> { opponent });
-        //    match.SetOutcome(scorePlayerOne > scorePlayerTwo ? 2 : 1);
-
-        //    var submitMatch = GetRepository().CreateMatch(match);
-        //    var desInfo = new JavaScriptSerializer();
-        //    var ratingDataSubmitter = desInfo.Deserialize<TrueskillRatingChange>(submitMatch.MatchUserRatings.First(f => f.UserId == 9).RatingData);
-        //    var ratingDataOpponent = desInfo.Deserialize<TrueskillRatingChange>(submitMatch.MatchUserRatings.First(f => f.UserId == 11).RatingData);
+            var scorePlayerOne = 21;
+            var scorePlayerTwo = 15;
+            var submitter = GetRepository().RetrieveUser(9);
+            var opponent = GetRepository().RetrieveUser(11);
 
 
-        //    Assert.That(ratingDataSubmitter.NewSkill, Is.Not.EqualTo(subStartRating.Skill));
-        //    Assert.That(ratingDataOpponent.NewSkill, Is.Not.EqualTo(oppStartRating.Skill));
-        //}
+            var match = new Match(MatchType.Type.Singles, DateTime.Now);
+            match.AddTeam(1, new List<User> { submitter });
+            match.AddTeam(2, new List<User> { opponent });
+            match.SetOutcome(scorePlayerOne > scorePlayerTwo ? 2 : 1);
+
+            var submitMatch = GetRepository().CreateMatch(match);
+            var desInfo = new JavaScriptSerializer();
+            var ratingDataSubmitter = desInfo.Deserialize<TrueskillRatingChange>(submitMatch.MatchUserRatings.First(f => f.UserId == 9).RatingData);
+            var ratingDataOpponent = desInfo.Deserialize<TrueskillRatingChange>(submitMatch.MatchUserRatings.First(f => f.UserId == 11).RatingData);
+
+
+            Assert.That(ratingDataSubmitter.NewSkill, Is.Not.EqualTo(subStartRating.Skill));
+            Assert.That(ratingDataOpponent.NewSkill, Is.Not.EqualTo(oppStartRating.Skill));
+        }
 
     }
 }

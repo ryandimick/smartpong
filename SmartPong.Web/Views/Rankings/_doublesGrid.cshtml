@@ -1,0 +1,37 @@
+﻿@using Kendo.Mvc.UI
+@using SmartPong.Models.View
+
+    @(Html.Kendo().Grid<UserRankingViewModel>()
+    .Name("grdDbRankings")
+    .Filterable(filterable => filterable.Mode(GridFilterMode.Row))
+    .Resizable(resize => resize.Columns(true))
+    .Reorderable(reorder => reorder.Columns(true))
+    .Scrollable(s => s.Virtual(true).Height("auto"))
+    .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+    .Sortable(sortable => sortable.AllowUnsort(true).SortMode(GridSortMode.MultipleColumn))
+    .Columns(c =>
+    {
+        c.Bound(p => p.DisplayName).Filterable(f => f.Cell(cell =>
+        {
+            cell.ShowOperators(false);
+            cell.Operator("contains");
+            cell.Template("onFilterKeyDown");
+    })).HeaderHtmlAttributes(new { style = "text-align: center" });
+        c.Bound(p => p.Rating).HtmlAttributes(new { style = "text-align: center" })
+            .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+        c.Bound(p => p.ActivityDate).HtmlAttributes(new { style = "text-align: center" }).ClientTemplate("#= kendo.toString(ActivityDate, \"MM/dd/yyyy HH:mm \") #")
+            .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+        c.Bound(p => p.Skill).HtmlAttributes(new { style = "text-align: center" })
+            .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+        c.Bound(p => p.Variance).Title("Variance").HtmlAttributes(new { style = "text-align: center" })
+            .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+    })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(5)
+        .Model(model =>
+        {
+            model.Id(p => p.UserId);
+            model.Field(p => p.Rank);
+        })
+        .Read(read => read.Action("Doubles", "Users"))))

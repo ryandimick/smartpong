@@ -40,7 +40,7 @@ namespace SmartPong
         /// The collection of match statuses in the database context.
         /// 
         /// </summary>
-        public DbSet<MatchStatus> MatchStatuses { get; set; }
+        //public DbSet<MatchStatus> MatchStatuses { get; set; }
 
         /// <summary>
         /// 

@@ -1,0 +1,23 @@
+﻿@using Kendo.Mvc.UI
+
+<div>
+
+    @(Html.Kendo().Window()
+          .Name("modal")
+          .Draggable(false)
+          .Events(e =>
+          {
+              e.Refresh("onRefresh");
+          })
+          .Modal(true)
+          .Visible(false)
+          .Width(650)
+          .Actions(actions => actions.Clear()))
+
+</div>
+
+<script>
+    function onRefresh() {
+        this.center();
+    }
+</script>

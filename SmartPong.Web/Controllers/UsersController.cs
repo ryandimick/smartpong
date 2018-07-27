@@ -25,8 +25,13 @@ namespace SmartPong.Controllers
             var userRatings = Global.Repository.RetrieveUserRatings(UserRatingType.TrueskillSingles);
             var viewModels = UserRankingViewModel.Generate(userRatings);
             return Json(viewModels.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        }
 
-           // return PartialView("_singlesRankings", viewModels);
+        public ActionResult Doubles([DataSourceRequest] DataSourceRequest request)
+        {
+            var userRatings = Global.Repository.RetrieveUserRatings(UserRatingType.TrueskillDoubles);
+            var viewModels = UserRankingViewModel.Generate(userRatings);
+            return Json(viewModels.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Register()

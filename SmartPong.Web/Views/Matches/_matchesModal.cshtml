@@ -1,0 +1,216 @@
+﻿@using Kendo.Mvc.UI
+@using SmartPong.Models
+@model SmartPong.Models.View.MatchCreateViewModel
+
+
+<script>
+    function onCmbSelection() {
+        return setBit();
+    }
+
+    function onChangeMTCmb() {
+        var type = document.getElementById('MatchType').value;
+
+        if (type === "Singles") {
+            document.getElementById('SingleOpponent').required = true;
+            document.getElementById('singles').style.display = "block";
+
+            document.getElementById('Teammate').required = false;
+            document.getElementById('DoubleOpponents').required = false;
+            return document.getElementById('doubles').style.display = "none";
+        }
+        document.getElementById('Teammate').required = true;
+        document.getElementById('DoubleOpponents').required = true;
+        document.getElementById('doubles').style.display = "block";
+
+        document.getElementById('SingleOpponent').required = false;
+        return document.getElementById('singles').style.display = "none";
+    }
+
+    function onDataBoundMTCmb() {
+        document.getElementById('DoubleOpponents').required = false;
+        document.getElementById('SingleOpponent').required = false;
+        document.getElementById('Teammate').required = false;
+        document.getElementById('singles').style.display = "none";
+        return document.getElementById('doubles').style.display = "none";
+    }
+
+    function modal_Cancel() {
+        document.getElementById('yesDirty').onclick = function() { yesSaveButton(); }
+
+        document.getElementById("dirtyMessage").innerHTML = "There are unsaved changes. Are you sure you want to continue?";
+
+        return openCloseDirtyModal(1);
+    }
+
+    $(document).ready(function () {
+        textBoxWatcher('Description');
+        textBoxWatcher('Occurences');
+        textBoxWatcher('Value');
+        textBoxWatcher('FutureHours');
+        textBoxWatcher('Threshold');
+    });
+
+    function saveMatch() {
+
+        var validator = $("#editingForm").data("kendoValidator");
+        if (!validator.validate()) {
+            return null;
+        }
+
+        var matchType = document.getElementById('MatchType').value;
+
+        var selectedOpponents = matchType === "Singles"
+            ? document.getElementById('SingleOpponent').value
+            : $("#DoubleOpponents").data("kendoMultiSelect").value().toString();
+
+        var matchObj = {
+            MatchTime: $("#MatchTime").data("kendoDateTimePicker").value(),
+            MatchType: matchType,
+            SelectedOpponents: selectedOpponents, 
+            YourScore: document.getElementById('YourScore').value,
+            OpponentScore: document.getElementById("OpponentScore").value,
+            Teammate : document.getElementById('Teammate').value
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("Matches_Save", "Matches")",
+            data: JSON.stringify({ match: matchObj}),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            success: function(data) {
+                openAndCloseModal();
+                if (data.success === true) {
+                    var gridCust = $('#grdMatches').data('kendoGrid');
+                    gridCust.dataSource.read();
+                    SuccessNotification("Sucessful Update!");
+                } else {
+                    ErrorNotification(data.message);
+                }
+            }
+        });
+    }
+
+
+</script>
+@{
+    Html.RenderPartial("_dirtyModal");
+}
+<form id="editingForm" data-role="validator" novalidate="novalidate" style="padding-left: 1.3em;">
+    <div class="k-edit-form-container" style="padding-top: 1em;">
+        <div class="editor-label">
+            @Html.LabelFor(m => m.MatchTime, "Match Time")
+        </div>
+        <div class="editor-field" style="padding-bottom: 2.5em;">
+            @(Html.Kendo().DateTimePickerFor(m => m.MatchTime)
+                    .Min("00:15 AM")
+                    .Interval(15)
+                    .Value(DateTime.Now)
+                    .HtmlAttributes(new
+                    {
+                        style = "width:275px;",
+                        required = "required",
+                    }))
+            @Html.ValidationMessageFor(m => m.MatchTime)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(m => m.MatchType, "Match Type")
+        </div>
+        <div class="editor-field" style="padding-bottom: 2.5em;">
+            @(Html.Kendo().ComboBox().Name("MatchType")
+                    .Events(e =>
+                    {
+                        e.Change("onChangeMTCmb");
+                        e.DataBound("onDataBoundMTCmb");
+                    })
+                    .Placeholder("Select Match Type")
+                    .HtmlAttributes(new { required = "required", style = "width:275px; font-size: 14px;" })
+                    .BindTo(Enum.GetNames(typeof(MatchType.Type)).ToList()))
+            @Html.ValidationMessageFor(m => m.MatchType)
+        </div>
+        <div id="singles">
+            <div class="editor-label">
+                @Html.LabelFor(m => m.SingleOpponent, "Opponent")
+            </div>
+            <div class="editor-field" style="padding-bottom: 2.5em;">
+                @(Html.Kendo().ComboBoxFor(m => m.SingleOpponent)
+                        .Events(e =>
+                        {
+                            e.Change("onCmbSelection");
+                        })
+                        .HtmlAttributes(new { required = "required", style = "width:275px; font-size: 14px;" })
+                        .Suggest(true)
+                        .Filter("contains")
+                        .BindTo(new SelectList(Model.SingleOpponent, "Value", "Text"))
+                        .Placeholder("Select Opponent"))
+                @Html.ValidationMessageFor(m => m.SingleOpponent)
+            </div>
+        </div>
+        <div id="doubles">
+            <div class="editor-label">
+                @Html.LabelFor(m => m.Teammate, "Teammate")
+            </div>
+            <div class="editor-field" style="padding-bottom: 2.5em;">
+                @(Html.Kendo().ComboBoxFor(m => m.Teammate)
+                      .Events(e =>
+                      {
+                          e.Change("onCmbSelection");
+                      })
+                      .HtmlAttributes(new { required = "required", style = "width:275px; font-size: 14px;" })
+                      .Suggest(true)
+                      .Filter("contains")
+                      .BindTo(new SelectList(Model.SingleOpponent, "Value", "Text"))
+                      .Placeholder("Select Teammate"))
+                @Html.ValidationMessageFor(m => m.Teammate)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.DoubleOpponents, "Opponnents")
+            </div>
+            <div class="editor-field" style="padding-bottom: 2.5em;">
+                @(Html.Kendo().MultiSelect().Name("DoubleOpponents")
+                      .Placeholder("Select Opponents")
+                      .Events(e =>
+                      {
+                          e.Change("onCmbSelection");
+                      }).AutoClose(false)
+                      .MaxSelectedItems(2)
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .HtmlAttributes(new {required = "required", style = "width:275px;"})
+                      .BindTo(Model.DoubleOpponents)
+                      )
+                @Html.ValidationMessageFor(m => m.DoubleOpponents)
+            </div>
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(m => m.YourScore, "Your Score")
+        </div>
+        <div class="editor-field" style="padding-bottom: 2.5em;">
+            @Html.Kendo().NumericTextBoxFor(m => m.YourScore).Spinners(false).HtmlAttributes(new { required = "required", style = " width:275px;", min="0"}).Format("#")
+            @Html.ValidationMessageFor(m => m.YourScore)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(m => m.OpponentScore, "Opponent Score")
+        </div>
+        <div class="editor-field" style="padding-bottom: 2.5em;">
+            @Html.Kendo().NumericTextBoxFor(m => m.OpponentScore).Spinners(false).HtmlAttributes(new { required = "required", style = " width:275px;", min="0"}).Format("#")
+            @Html.ValidationMessageFor(m => m.OpponentScore)
+        </div>
+    </div>
+</form>
+<hr class="popup-modal" />
+<div class="buttons-wrap">
+    <a id="cancel" class="k-button" href="#" style="width: 100px; margin: 3px; float: right" onclick="modal_Cancel()">
+        <span></span>Cancel
+    </a>
+    <a id="save" class="k-button" href="#" style="width: 100px; margin: 3px; background: #3343a4; border-color: #428BCA; color: #fff; float: right" onclick="saveMatch()">
+        <span></span>Save
+    </a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        ValidateForm();
+    });
+</script>

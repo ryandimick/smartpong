@@ -8,5 +8,10 @@ namespace SmartPong.Controllers
         {
             return View();
         }
+
+        public PartialViewResult Doubles()
+        {
+            return PartialView("_doublesGrid");
+        }
     }
 }

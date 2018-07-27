@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using SmartPong.Models
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
@@ -117,12 +118,19 @@
                 <li>
                     <a href=@Url.Action("Create", "Matches")><i class="fa fa-lg fa-fw fa-plus"></i> <span class="menu-item-parent">Submit Match</span> </a>
                 </li>
-                @*@if (Global.Matches.Any(m => m.Status == MatchStatus.PendingConfirmation && m.PlayerTwoId == (Global.Players.SingleOrDefault(p => string.Equals(p.Username, User.Identity.Name, StringComparison.CurrentCultureIgnoreCase)) == null ? 0 : (Global.Players.Single(p => string.Equals(p.Username, User.Identity.Name, StringComparison.CurrentCultureIgnoreCase)).Id))))
-                    {
-                        <li>
-                            <a href=@Url.Action("Pending", "Matches")><i class="fa fa-lg fa-fw fa-check"></i> <span class="menu-item-parent">Confirm Matches</span> </a>
-                        </li>
-                    }*@
+                @*@if (Global.Repository.RetrieveMatches(m => m.Status == MatchStatus.Submitted && m.MatchParticipants.Any(a => a.MatchTeamId != 1 && a.UserId == Global.Repository.RetrieveUser(User.Identity.Name).UserId)).Any())*@
+                @{
+                    var user = Global.Repository.RetrieveUser(User.Identity.Name);
+                    var matches = Global.Repository.RetrieveMatches(m => m.Status ==  MatchStatus.Submitted);
+                    var t = 1;
+                }
+                @if (matches.Any(any => any.MatchParticipants.Any(a => a.MatchTeamId != 1 && a.UserId == user.UserId)))
+
+                {
+                    <li>
+                        <a href=@Url.Action("Pending", "Matches")><i class="fa fa-lg fa-fw fa-check"></i> <span class="menu-item-parent">Confirm Matches</span> </a>
+                    </li>
+                }
                 <li>
                     <a href=@Url.Action("Index", "Help")><i class="fa fa-lg fa-fw fa-info"></i> <span class="menu-item-parent">About</span></a>
                 </li>
@@ -154,11 +162,13 @@
             </div>
         </div>
     </div>
-    
-    
+
+
     @Scripts.Render("~/js/smartadmin")
     @*@Styles.Render("css/kendo")*@
-    @Scripts.Render("bundles/kendo")
+    @Scripts.Render("~/bundles/kendo")
+
+    @RenderSection("pagespecific", required: false)
 
     <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
     @*<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
@@ -169,16 +179,16 @@
     </script>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-<script>
-    if (!window.jQuery.ui) {
-        document.write('<script src="/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
-    }
-</script>
+    <script>
+        if (!window.jQuery.ui) {
+            document.write('<script src="/js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+        }
+    </script>
 
 
     <!-- IMPORTANT: APP CONFIG -->
     <script src="/js/app.config.js"></script>
-    
+
     <!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
     <script src="/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
 
@@ -206,6 +216,9 @@
     <!-- FastClick: For mobile devices -->
     <script src="/js/plugin/fastclick/fastclick.min.js"></script>
 
+    <!-- Custom shared JS file -->
+    <script src="/Script/js/ascern.kendo.js"></script>
+
     <!-- MAIN APP JS FILE -->
     <script src="/js/app.min.js"></script>
 
@@ -217,6 +230,6 @@
 
     </script>
 
-    @RenderSection("pagespecific", required: false)
+
 </body>
 </html>

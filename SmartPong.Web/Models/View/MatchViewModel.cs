@@ -33,7 +33,7 @@ namespace SmartPong.Models.View
 
         public DateTime MatchDate => _match.MatchDate.Value;
 
-        public string Status => _match.MatchStatus.Description;
+        public MatchStatus Status => _match.Status;
 
         public MatchUserViewModel WinnerOne { get; private set; }
 

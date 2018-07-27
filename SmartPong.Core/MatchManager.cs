@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Script.Serialization;
 using Moserware.Skills;
 using SmartPong.Models;
+using Team = Moserware.Skills.Team;
 
 namespace SmartPong
 {
@@ -27,7 +28,7 @@ namespace SmartPong
 
             foreach (var lastMatch in match.MatchParticipants.Select(participant => FindLastMatch(participant.UserId, match.MatchDate.Value)))
             {
-                if (lastMatch != null && lastMatch.Status < (int)MatchStatus.Type.Posted)
+                if (lastMatch != null && lastMatch.Status < MatchStatus.Posted)
                 {
                     dirty = true;
                     break;
@@ -36,15 +37,15 @@ namespace SmartPong
 
             if (dirty)
             {
-                match.Status = (int)MatchStatus.Type.Pending;
+                match.Status = MatchStatus.Pending;
             }
             else
             {
-                match.Status = (int)MatchStatus.Type.Posted;
+                match.Status = MatchStatus.Posted;
             }
 
             var firstUnconfirmedMatch =
-                _context.Matches.Where(m => m.Status == (int)MatchStatus.Type.Submitted)
+                _context.Matches.Where(m => m.Status == MatchStatus.Submitted)
                     .Include(x => x.MatchParticipants)
                     .OrderBy(m => m.MatchDate)
                     .First();
@@ -69,7 +70,7 @@ namespace SmartPong
             _context.Entry(match).State = EntityState.Modified;
             _context.SaveChanges();
 
-            UpdateNewerMatches(match.MatchTypeId, updateDate, dirtyUsers);
+            UpdateNewerMatches(match, match.MatchTypeId, updateDate, dirtyUsers);
 
             return match;
         }
@@ -79,7 +80,7 @@ namespace SmartPong
             newMatch.ValidateInput();
 
             newMatch.CreateDate = DateTime.Now;
-            newMatch.Status = (int)MatchStatus.Type.Submitted;
+            newMatch.Status = MatchStatus.Submitted;
 
             ProcessMatch(newMatch);
 
@@ -90,7 +91,7 @@ namespace SmartPong
                                join user in _context.Users.ToList() on participant.UserId equals user.UserId
                                select user;
 
-            UpdateNewerMatches(newMatch.MatchTypeId, newMatch.MatchDate.Value, participants.ToList());
+            UpdateNewerMatches(newMatch, newMatch.MatchTypeId, newMatch.MatchDate.Value, participants.ToList());
 
             return newMatch;
         }
@@ -102,7 +103,7 @@ namespace SmartPong
             _context.SaveChanges();
 
             var firstUnconfirmedMatch =
-                    _context.Matches.Where(m => m.Status == (int)MatchStatus.Type.Submitted)
+                    _context.Matches.Where(m => m.Status == MatchStatus.Submitted)
                         .Include(x => x.MatchParticipants)
                         .OrderBy(m => m.MatchDate)
                         .First();
@@ -123,7 +124,7 @@ namespace SmartPong
                 updateDate = match.MatchDate.Value;
             }
 
-            UpdateNewerMatches(match.MatchTypeId, updateDate, dirtyUsers);
+            UpdateNewerMatches(match, match.MatchTypeId, updateDate, dirtyUsers);
         }
 
         private Match FindLastMatch(int userId, DateTime matchDate)
@@ -163,23 +164,26 @@ namespace SmartPong
                 ratings.Add(participant.UserId, oldRating);
             }
 
-            var teamOne = (from participant in match.MatchParticipants
-                           where participant.MatchTeamId == 1
-                           let player = new Player(participant.UserId)
-                           let rating = ratings[participant.UserId]
-                           select new Moserware.Skills.Team(player, new Rating(rating.NewSkill, rating.NewVariance))).First();
+            var firstDbTeam = new Team();
+            var secondDbTeam = new Team();
 
-            var teamTwo = (from participant in match.MatchParticipants
-                           where participant.MatchTeamId == 2
-                           let player = new Player(participant.UserId)
-                           let rating = ratings[participant.UserId]
-                           select new Moserware.Skills.Team(player, new Rating(rating.NewSkill, rating.NewVariance))).First();
+            foreach (var participant in match.MatchParticipants.Where(w => w.MatchTeamId == 1))
+            {
+                firstDbTeam.AddPlayer(new Player(participant.UserId),
+                    new Rating(ratings[participant.UserId].NewSkill, ratings[participant.UserId].NewVariance));
+            }
 
-            var teams = Teams.Concat(teamOne, teamTwo);
+            foreach (var participant in match.MatchParticipants.Where(w => w.MatchTeamId == 2))
+            {
+                secondDbTeam.AddPlayer(new Player(participant.UserId),
+                    new Rating(ratings[participant.UserId].NewSkill, ratings[participant.UserId].NewVariance));
+            }
+
+            var dbTeam = Teams.Concat(firstDbTeam, secondDbTeam);
 
             var newRatings = match.WinningTeam == 1
-                ? TrueSkillCalculator.CalculateNewRatings(GameInfo.DefaultGameInfo, teams, 1, 2)
-                : TrueSkillCalculator.CalculateNewRatings(GameInfo.DefaultGameInfo, teams, 2, 1);
+                ? TrueSkillCalculator.CalculateNewRatings(GameInfo.DefaultGameInfo, dbTeam, 1, 2)
+                : TrueSkillCalculator.CalculateNewRatings(GameInfo.DefaultGameInfo, dbTeam, 2, 1);
 
             match.MatchUserRatings = new List<MatchUserRating>();
             for (int i = 0; i < match.MatchParticipants.Count; i++)
@@ -194,9 +198,10 @@ namespace SmartPong
                     NewSkill = newRating.Mean,
                     NewVariance = newRating.StandardDeviation
                 };
+
                 var matchUserRating = new MatchUserRating
                 {
-                    RatingTypeId = 1,
+                    RatingTypeId = match.MatchParticipants.Count == 4 ? 2 : 1,
                     UserId = participant.UserId,
                     RatingData = serializer.Serialize(trueskillRatingChange)
                 };
@@ -206,15 +211,15 @@ namespace SmartPong
 
         internal IEnumerable<Match> RetrieveMatches()
         {
-            return _context.Matches.Include(x => x.MatchParticipants).Include(x => x.MatchStatus);
+            return _context.Matches.Include(x => x.MatchParticipants);
         }
 
         internal IEnumerable<Match> RetrieveMatches(Func<Match, bool> predicate)
         {
             return RetrieveMatches().Where(predicate);
-        } 
+        }
 
-        private void UpdateNewerMatches(int matchType, DateTime matchDate, ICollection<User> dirtyUsers)
+        private void UpdateNewerMatches(Match newMatch, int matchType, DateTime matchDate, ICollection<User> dirtyUsers)
         {
             var matches = _context.Matches.Where(m => m.MatchDate > matchDate && m.MatchTypeId == matchType).OrderBy(m => m.MatchDate).Include(x => x.MatchParticipants).ToList();
             foreach (var match in matches)
@@ -231,32 +236,38 @@ namespace SmartPong
 
                     if (match.ConfirmDate == null)
                     {
-                        match.Status = (int)MatchStatus.Type.Submitted;
+                        match.Status = MatchStatus.Submitted;
                     }
                     else
                     {
-                        match.Status = (int)MatchStatus.Type.Pending;
+                        match.Status = MatchStatus.Pending;
                     }
                 }
                 else
                 {
-                    match.Status = (int)MatchStatus.Type.Posted;
+                    match.Status = MatchStatus.Posted;
                 }
                 var oldMatch = _context.Matches.First(m => m.MatchId == match.MatchId);
                 _context.Entry(oldMatch).CurrentValues.SetValues(match);
                 _context.SaveChanges();
             }
 
-            UpdateUserRatings();
+            UpdateUserRatings(newMatch);
         }
 
-        private void UpdateUserRatings()
+        private void UpdateUserRatings(Match newMatch)
         {
             var serializer = new JavaScriptSerializer();
             var users = _context.Users.ToList();
             foreach (var user in users)
             {
-                var userRatings = _context.UserRatings.Where(ur => ur.UserId == user.UserId);
+                var rateTypeId = newMatch.MatchUserRatings.First().RatingTypeId;
+                var userRatings = _context.UserRatings.Where(ur => ur.UserId == user.UserId && ur.RatingTypeId == rateTypeId);
+
+                //var userRatings = _context.UserRatings.FirstOrDefault(ur =>
+                //  ur.UserId == user.UserId);
+                //todo retrieve userRatings with ratingType filtered?
+
                 _context.UserRatings.RemoveRange(userRatings);
 
                 var lastPostedMatch =
@@ -264,7 +275,7 @@ namespace SmartPong
                         .Include(x => x.MatchUserRatings)
                         .Where(
                             m =>
-                                m.Status == (int) MatchStatus.Type.Posted &&
+                                m.Status == MatchStatus.Posted &&
                                 m.MatchParticipants.Any(mp => mp.UserId == user.UserId))
                         .OrderByDescending(m => m.MatchDate)
                         .FirstOrDefault();
@@ -292,8 +303,8 @@ namespace SmartPong
                 }
 
                 var userRating = new UserRating
-                {
-                    RatingTypeId = 1,
+                {//todo leave the ratetypeId
+                    RatingTypeId = rateTypeId,//userRatings.First().RatingTypeId == (int) UserRatingType.TrueskillDoubles ? 2: 1,
                     UserId = user.UserId,
                     RatingData = serializer.Serialize(trueskillRating)
                 };

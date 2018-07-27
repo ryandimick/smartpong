@@ -1,0 +1,21 @@
+﻿@using Kendo.Mvc.UI
+<div>
+    @(Html.Kendo().Window()
+          .Name("DirtyModal")
+          .Title("Unsaved Changes!")
+          .Visible(false)
+          .Modal(true)
+          .Actions(a => a.Clear())
+          .Draggable(false)
+          .Width(300)
+          .Content(@<text>
+            <br />
+            <img style="float: left; margin: 0 15px 15px 0;" src="~/Content/img/icon_warning_50_BlogOra.png" alt="" />
+            <p id="dirtyMessage">
+            </p>
+            <hr class="dirty" />
+            <div class="buttons-wrap">
+                <button class="k-button" id="noDirty" style="float: right; margin-left: 5px" onclick="noSaveButton()">No</button>
+                <button class="k-button" id="yesDirty" style="margin-right: 5px; float: right; color: #fff; background-color: #ff8000; border-color: #ff8000;">Yes</button>
+            </div></text>))
+    </div>

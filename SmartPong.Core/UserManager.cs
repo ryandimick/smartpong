@@ -106,7 +106,7 @@ namespace SmartPong
 
         private User FindUser(string username)
         {
-            var user = _context.Users.First(u => u.Username == username);
+            var user = _context.Users.FirstOrDefault(f => f.Username.Equals(username, StringComparison.CurrentCultureIgnoreCase));
             return user;
         }
 

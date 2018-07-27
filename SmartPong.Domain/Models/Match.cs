@@ -53,7 +53,8 @@ namespace SmartPong.Models
         /// The status code of the match.
         /// 
         /// </summary>
-        public int Status { get; set; }
+        //[ForeignKey("MatchStatus")]
+        public MatchStatus Status { get; set; }
 
         /// <summary>
         /// 
@@ -96,8 +97,8 @@ namespace SmartPong.Models
         /// The status of the match.
         /// 
         /// </summary>
-        [ForeignKey("Status")]
-        public MatchStatus MatchStatus { get; set; }
+        //[ForeignKey("Status")]
+        //public MatchStatus MatchStatus { get; set; }
 
         /// <summary>
         /// 

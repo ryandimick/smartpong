@@ -72,6 +72,18 @@ function ValidateForm() {
     });
 }
 
+//Shared Kendo Modal
+function openAndCloseModal(e) {
+    var wnd = $("#modal").data("kendoWindow");
+    if (e === 1) {
+        wnd.center().open();
+        return null;
+    }
+    wnd.close();
+    return null;
+}
+//Shared Kendo Modal
+
 //Delete Modal
 function openDeleteModal(e) {
     var wnd = $("#DeleteModal").data("kendoWindow");
