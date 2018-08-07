@@ -18,11 +18,12 @@ namespace SmartPong
             _context = context;
         }
 
-        internal Match ConfirmMatch(int matchId, int userId)
+        internal Match ConfirmMatch(int matchId, int userId, string status)
         {
             var match = _context.Matches.Include(x => x.MatchParticipants).First(m => m.MatchId == matchId);
             match.ConfirmDate = DateTime.Now;
             match.ConfirmUser = userId;
+            match.Status = status == "deny" ? MatchStatus.Denied : MatchStatus.Posted;
 
             bool dirty = false;
 
@@ -39,10 +40,10 @@ namespace SmartPong
             {
                 match.Status = MatchStatus.Pending;
             }
-            else
-            {
-                match.Status = MatchStatus.Posted;
-            }
+            //else
+            //{
+            //    match.Status = MatchStatus.Posted;
+            //}
 
             var firstUnconfirmedMatch =
                 _context.Matches.Where(m => m.Status == MatchStatus.Submitted)

@@ -122,9 +122,8 @@
                 @{
                     var user = Global.Repository.RetrieveUser(User.Identity.Name);
                     var matches = Global.Repository.RetrieveMatches(m => m.Status ==  MatchStatus.Submitted);
-                    var t = 1;
                 }
-                @if (matches.Any(any => any.MatchParticipants.Any(a => a.MatchTeamId != 1 && a.UserId == user.UserId)))
+                @if (matches.Any(any => any.MatchParticipants.Any(a => a.MatchTeamId != 1 && a.UserId == user.UserId)) || user.Admin)
 
                 {
                     <li>

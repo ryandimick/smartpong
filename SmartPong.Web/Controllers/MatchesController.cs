@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using SmartPong.Models;
 using SmartPong.Models.View;
+using WebGrease.Css.Extensions;
 
 namespace SmartPong.Controllers
 {
@@ -45,7 +45,7 @@ namespace SmartPong.Controllers
 
                 if (match.MatchType == MatchType.Type.Singles)
                 {
-                    var submitter = users.First(f => String.Equals(f.Username, User.Identity.Name, StringComparison.CurrentCultureIgnoreCase));
+                    var submitter = GetUserInfo();
                     var opponent = users.First(f => f.UserId == Convert.ToInt32(match.SelectedOpponents));
                     var matchToSubmit = new Match(match.MatchType, match.MatchTime);
                     matchToSubmit.AddTeam(1, new List<User> { submitter });
@@ -54,7 +54,7 @@ namespace SmartPong.Controllers
                 }
                 else
                 {
-                    var submitter = users.First(f => String.Equals(f.Username, User.Identity.Name, StringComparison.CurrentCultureIgnoreCase));
+                    var submitter = GetUserInfo();
                     var teammate = users.First(f => f.UserId == Convert.ToInt32(match.Teammate));
                     var opponents = match.SelectedOpponents.Split(',')
                         .Select(user => users.First(f => f.UserId == Convert.ToInt32(user))).ToList();
@@ -65,7 +65,7 @@ namespace SmartPong.Controllers
                 }
                 return Json(new{success = true});
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(new {success = false, message = "Invalid Operation!"});
             }
@@ -76,11 +76,6 @@ namespace SmartPong.Controllers
             matchToSubmit.SetOutcome(match.YourScore > match.OpponentScore ? 1 : 2);
             Global.Repository.CreateMatch(matchToSubmit);
         }
-
-        //public PartialViewResult Confirm()
-        //{
-        //    return PendingMatches();
-        //}
 
         public ActionResult Create()
         {
@@ -95,24 +90,29 @@ namespace SmartPong.Controllers
 
         public ActionResult Pending()
         {
-            return View();
+            return View("_pendingMatches");
         }
 
         public ActionResult Read_Pending_Matches([DataSourceRequest] DataSourceRequest request)
         {
             var user = Global.Repository.RetrieveUser(User.Identity.Name);
 
-            var matches = user != null
-                ? Global.Repository.RetrieveMatches(m => m.Status == MatchStatus.Submitted && m.MatchParticipants.Any(a => a.MatchTeamId != 1 && a.UserId == user.UserId)).ToGridViewModel()
+            var matches = !user.Admin
+                ? Global.Repository.RetrieveMatches(m =>
+                        m.Status == MatchStatus.Submitted &&
+                        m.MatchParticipants.Any(a => a.MatchTeamId != 1 && a.UserId == user.UserId)).ToGridViewModel()
                     .OrderByDescending(m => m.MatchDate)
-                : new List<MatchGridViewModel>().OrderByDescending( m => m.MatchDate);
+                : Global.Repository.RetrieveMatches().ToGridViewModel();
             return Json(matches.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Submit_Pending_Matches(int matchId)
+        public ActionResult Submit_Pending_Matches(IEnumerable<int> updateRows, string action)
         {
             try
             {
+
+               updateRows.ForEach(x => Global.Repository.ConfirmMatch(x, GetUserInfo().UserId, action));
+
                 return Json(new {success = true});
             }
             catch (Exception)
@@ -120,6 +120,15 @@ namespace SmartPong.Controllers
                 return Json(new {success = false, message = "Invalid Operation!"});
             }
         }
+
+        private User GetUserInfo()
+        {
+            IEnumerable<User> users = Global.Repository.RetrieveUsers(w => w.Enabled);
+            var loggedInUser = users.First(f =>
+                String.Equals(f.Username, User.Identity.Name, StringComparison.CurrentCultureIgnoreCase));
+            return loggedInUser;
+        }
+
 
         //private PartialViewResult PendingMatches()
         //{

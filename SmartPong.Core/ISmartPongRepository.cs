@@ -16,7 +16,7 @@ namespace SmartPong
         /// <param name="userId">The unique identifier of the user that confirmed the match's outcome.</param>
         /// 
         /// <returns>The match that was confirmed.</returns>
-        Match ConfirmMatch(int matchId, int userId);
+        Match ConfirmMatch(int matchId, int userId, string status);
 
         /// <summary>
         /// 
