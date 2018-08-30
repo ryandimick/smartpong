@@ -130,6 +130,15 @@ namespace SmartPong
 
         /// <summary>
         /// 
+        /// Return all match user ratings to be displayed in chart.
+        /// 
+        /// </summary>
+        /// 
+        /// <returns>The collection of match user ratings.</returns>
+        IEnumerable<MatchUserRating> RetrieveMatchUserRatings();
+
+        /// <summary>
+        /// 
         /// Returns all settings.
         /// 
         /// </summary>

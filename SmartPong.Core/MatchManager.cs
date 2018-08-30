@@ -46,7 +46,7 @@ namespace SmartPong
             //}
 
             var firstUnconfirmedMatch =
-                _context.Matches.Where(m => m.Status == MatchStatus.Submitted)
+                _context.Matches.Where(m => m.Status == MatchStatus.Submitted || m.Status == MatchStatus.Pending)//todo remove after || if this does not work
                     .Include(x => x.MatchParticipants)
                     .OrderBy(m => m.MatchDate)
                     .First();
@@ -218,6 +218,11 @@ namespace SmartPong
         internal IEnumerable<Match> RetrieveMatches(Func<Match, bool> predicate)
         {
             return RetrieveMatches().Where(predicate);
+        }
+
+        public IEnumerable<MatchUserRating> RetrieveMatchUserRatings()
+        {
+            return _context.MatchUserRatings;
         }
 
         private void UpdateNewerMatches(Match newMatch, int matchType, DateTime matchDate, ICollection<User> dirtyUsers)

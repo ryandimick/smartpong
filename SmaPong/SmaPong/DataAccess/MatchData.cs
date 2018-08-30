@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using Dapper;
 using SmaPong.Models;
+using SmartPong.Models;
 
 namespace SmaPong.DataAccess
 {
@@ -40,6 +41,16 @@ namespace SmaPong.DataAccess
         }
 
         private const string RetrieveAllSql = "select * from dbo.Matches";
+
+        public List<MatchUserRating> RetrieveMatchUserRatings()
+        {
+            using (var connection = ConnectionFactory.GetConnection())
+            {
+                return connection.Query<MatchUserRating>(RetrieveAllUserRatings).ToList();
+            }
+        }
+
+        private const string RetrieveAllUserRatings = "select * from dbo.MatchUserRatings";
 
         public static int Update(IDbConnection connection, IDbTransaction transaction, IEnumerable<Match> matches)
         {

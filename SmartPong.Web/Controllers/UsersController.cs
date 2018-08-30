@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using SmartPong.Helpers;
 using SmartPong.Models;
 using SmartPong.Models.View;
@@ -23,14 +24,14 @@ namespace SmartPong.Controllers
         public ActionResult Singles([DataSourceRequest] DataSourceRequest request)
         {
             var userRatings = Global.Repository.RetrieveUserRatings(UserRatingType.TrueskillSingles);
-            var viewModels = UserRankingViewModel.Generate(userRatings);
+            var viewModels = UserRankingViewModel.Generate(userRatings).OrderByDescending(o => o.Rating);
             return Json(viewModels.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Doubles([DataSourceRequest] DataSourceRequest request)
         {
             var userRatings = Global.Repository.RetrieveUserRatings(UserRatingType.TrueskillDoubles);
-            var viewModels = UserRankingViewModel.Generate(userRatings);
+            var viewModels = UserRankingViewModel.Generate(userRatings).OrderByDescending(o => o.Rating);
             return Json(viewModels.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 

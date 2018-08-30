@@ -1476,6 +1476,7 @@
     <Compile Include="Models\View\MatchGridViewModel.cs" />
     <Compile Include="Models\View\MatchUserViewModel.cs" />
     <Compile Include="Models\View\MatchViewModel.cs" />
+    <Compile Include="Models\View\SingleRakingsChartViewModels.cs" />
     <Compile Include="Models\View\UserRankingViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

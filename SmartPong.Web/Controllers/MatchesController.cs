@@ -12,6 +12,8 @@ namespace SmartPong.Controllers
 {
     public sealed class MatchesController : BaseController
     {
+        private static readonly IEnumerable<SingleRakingsChartViewModels> _chartViewModes = GetRankingViews();
+
         public ActionResult Index()
         {
             return View();
@@ -19,8 +21,9 @@ namespace SmartPong.Controllers
 
         public ActionResult Read_Matches([DataSourceRequest] DataSourceRequest request)
         {
-            var matches = Global.Repository.RetrieveMatches(m => m.Status >=  MatchStatus.Submitted).ToGridViewModel()
+            var matches = Global.Repository.RetrieveMatches(m => m.Status >= MatchStatus.Submitted).ToGridViewModel()
                 .OrderByDescending(m => m.MatchDate);
+
             return Json(matches.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
@@ -30,13 +33,13 @@ namespace SmartPong.Controllers
 
             var matchViewModel = new MatchCreateViewModel();
             matchViewModel.DoubleOpponents =
-                 opponentList.Select(x => new SelectListItem {Value = x.UserId.ToString(), Text = x.DisplayName});
+                 opponentList.Select(x => new SelectListItem { Value = x.UserId.ToString(), Text = x.DisplayName });
             matchViewModel.SingleOpponent = opponentList.Select(x =>
-                new SelectListItem {Value = x.UserId.ToString(), Text = x.DisplayName});
-            
+                new SelectListItem { Value = x.UserId.ToString(), Text = x.DisplayName });
+
             return PartialView("_matchesModal", matchViewModel);
         }
-        
+
         public ActionResult Matches_Save(MatchCreateViewModel match)
         {
             try
@@ -63,11 +66,11 @@ namespace SmartPong.Controllers
                     matchToSubmit.AddTeam(2, new List<User> { opponents.First(), opponents.Last() });
                     SubmitMatch(match, matchToSubmit);
                 }
-                return Json(new{success = true});
+                return Json(new { success = true });
             }
             catch (Exception)
             {
-                return Json(new {success = false, message = "Invalid Operation!"});
+                return Json(new { success = false, message = "Invalid Operation!" });
             }
         }
 
@@ -99,10 +102,10 @@ namespace SmartPong.Controllers
 
             var matches = !user.Admin
                 ? Global.Repository.RetrieveMatches(m =>
-                        m.Status == MatchStatus.Submitted &&
+                        m.Status < MatchStatus.Submitted &&
                         m.MatchParticipants.Any(a => a.MatchTeamId != 1 && a.UserId == user.UserId)).ToGridViewModel()
                     .OrderByDescending(m => m.MatchDate)
-                : Global.Repository.RetrieveMatches().ToGridViewModel();
+                : Global.Repository.RetrieveMatches(m => m.Status < MatchStatus.Posted).ToGridViewModel();
             return Json(matches.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
@@ -110,16 +113,20 @@ namespace SmartPong.Controllers
         {
             try
             {
+                updateRows.ForEach(x => Global.Repository.ConfirmMatch(x, GetUserInfo().UserId, action));
 
-               updateRows.ForEach(x => Global.Repository.ConfirmMatch(x, GetUserInfo().UserId, action));
-
-                return Json(new {success = true});
+                return Json(new { success = true });
             }
             catch (Exception)
             {
-                return Json(new {success = false, message = "Invalid Operation!"});
+                return Json(new { success = false, message = "Invalid Operation!" });
             }
         }
+
+        //public ActionResult Match_User_Selected_Graph(UserRankingViewModel viewModel)
+        //{
+        //todo work on selectio
+        //}
 
         private User GetUserInfo()
         {
@@ -127,6 +134,29 @@ namespace SmartPong.Controllers
             var loggedInUser = users.First(f =>
                 String.Equals(f.Username, User.Identity.Name, StringComparison.CurrentCultureIgnoreCase));
             return loggedInUser;
+        }
+
+        public ActionResult Match_Group_Doubles_Ratings_Graph()//todo group dates together create cluster of data points.. 
+        {
+            var matchUserRatings = _chartViewModes.Where(w => w.RatingTypeId == (int) UserRatingType.TrueskillDoubles);
+
+            return Json(matchUserRatings);
+        }
+
+        public ActionResult Match_Group_Single_Ratings_Graph()
+        {
+            var matchUserRatings = _chartViewModes.Where(w => w.RatingTypeId == (int) UserRatingType.TrueskillSingles);
+            
+            return Json(matchUserRatings);
+        }
+
+        private static IEnumerable<SingleRakingsChartViewModels> GetRankingViews()
+        {
+            var matches = Global.Repository.RetrieveMatches();
+            var matchUserRatings = Global.Repository
+                .RetrieveMatchUserRatings()
+                .ToChartFormat(matches).OrderByDescending(o => o.MatchId);
+            return matchUserRatings;
         }
 
 

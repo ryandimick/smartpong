@@ -18,7 +18,7 @@
                 <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>Match History</h2>
+                        <h2>Pending Matches</h2>
                     </header>
                     <div>
                         <div class="widget-body no-padding">
@@ -112,7 +112,7 @@
             disableToolbarBtns('submit');
             disableToolbarBtns('deny');
         } else {
-            if (selectedRows.length > 1) {
+            if (selectedRows.length < 1) {
                 disableToolbarBtns('submit');
                 disableToolbarBtns('deny');
             } else {

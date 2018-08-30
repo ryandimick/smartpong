@@ -115,9 +115,9 @@
                 <li>
                     <a href=@Url.Action("Index", "Matches")><i class="fa fa-lg fa-fw fa-history"></i> <span class="menu-item-parent">Matches</span> </a>
                 </li>
-                <li>
+                @*<li>
                     <a href=@Url.Action("Create", "Matches")><i class="fa fa-lg fa-fw fa-plus"></i> <span class="menu-item-parent">Submit Match</span> </a>
-                </li>
+                </li>*@
                 @*@if (Global.Repository.RetrieveMatches(m => m.Status == MatchStatus.Submitted && m.MatchParticipants.Any(a => a.MatchTeamId != 1 && a.UserId == Global.Repository.RetrieveUser(User.Identity.Name).UserId)).Any())*@
                 @{
                     var user = Global.Repository.RetrieveUser(User.Identity.Name);
@@ -130,9 +130,6 @@
                         <a href=@Url.Action("Pending", "Matches")><i class="fa fa-lg fa-fw fa-check"></i> <span class="menu-item-parent">Confirm Matches</span> </a>
                     </li>
                 }
-                <li>
-                    <a href=@Url.Action("Index", "Help")><i class="fa fa-lg fa-fw fa-info"></i> <span class="menu-item-parent">About</span></a>
-                </li>
             </ul>
         </nav>
 

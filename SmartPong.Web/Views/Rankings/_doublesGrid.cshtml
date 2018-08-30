@@ -1,37 +1,74 @@
 ﻿@using Kendo.Mvc.UI
 @using SmartPong.Models.View
 
-    @(Html.Kendo().Grid<UserRankingViewModel>()
-    .Name("grdDbRankings")
-    .Filterable(filterable => filterable.Mode(GridFilterMode.Row))
-    .Resizable(resize => resize.Columns(true))
-    .Reorderable(reorder => reorder.Columns(true))
-    .Scrollable(s => s.Virtual(true).Height("auto"))
-    .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
-    .Sortable(sortable => sortable.AllowUnsort(true).SortMode(GridSortMode.MultipleColumn))
-    .Columns(c =>
-    {
-        c.Bound(p => p.DisplayName).Filterable(f => f.Cell(cell =>
-        {
-            cell.ShowOperators(false);
-            cell.Operator("contains");
-            cell.Template("onFilterKeyDown");
-    })).HeaderHtmlAttributes(new { style = "text-align: center" });
-        c.Bound(p => p.Rating).HtmlAttributes(new { style = "text-align: center" })
-            .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
-        c.Bound(p => p.ActivityDate).HtmlAttributes(new { style = "text-align: center" }).ClientTemplate("#= kendo.toString(ActivityDate, \"MM/dd/yyyy HH:mm \") #")
-            .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
-        c.Bound(p => p.Skill).HtmlAttributes(new { style = "text-align: center" })
-            .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
-        c.Bound(p => p.Variance).Title("Variance").HtmlAttributes(new { style = "text-align: center" })
-            .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
-    })
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .PageSize(5)
-        .Model(model =>
-        {
-            model.Id(p => p.UserId);
-            model.Field(p => p.Rank);
-        })
-        .Read(read => read.Action("Doubles", "Users"))))
+<div class="form-horizontal form-widgets no-padding col-sm-12">
+    <div class="no-padding col-sm-6">
+        @(Html.Kendo().Grid<UserRankingViewModel>()
+                .Name("grdDbRankings")
+                .Filterable(filterable => filterable.Mode(GridFilterMode.Row))
+                .Resizable(resize => resize.Columns(true))
+                .Reorderable(reorder => reorder.Columns(true))
+                .Scrollable(s => s.Virtual(true).Height("auto"))
+                .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                .Sortable(sortable => sortable.AllowUnsort(true).SortMode(GridSortMode.MultipleColumn))
+                .Columns(c =>
+                {
+                    c.Bound(p => p.DisplayName).Filterable(f => f.Cell(cell =>
+                    {
+                        cell.ShowOperators(false);
+                        cell.Operator("contains");
+                        cell.Template("onFilterKeyDown");
+                    })).Width(200).HeaderHtmlAttributes(new { style = "text-align: center" });
+                    c.Bound(p => p.Rating).Width(100).HtmlAttributes(new { style = "text-align: center" }).Format("{0:n2}")
+                        .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                    c.Bound(p => p.ActivityDate).Width(125).HtmlAttributes(new { style = "text-align: center" }).ClientTemplate("#= kendo.toString(ActivityDate, \"MM/dd/yyyy HH:mm \") #")
+                        .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                    c.Bound(p => p.Skill).Width(100).HtmlAttributes(new { style = "text-align: center" }).Format("{0:n2}")
+                        .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                    c.Bound(p => p.Variance).Width(100).Title("Variance").HtmlAttributes(new { style = "text-align: center" }).Format("{0:n2}")
+                        .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                })
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(5)
+                    .Model(model =>
+                    {
+                        model.Id(p => p.UserId);
+                        model.Field(p => p.Rank);
+                    })
+                    .Read(read => read.Action("Doubles", "Users"))))
+    </div>
+    <div class=" no-padding col-sm-6">
+        @(Html.Kendo().Chart<SingleRakingsChartViewModels>()
+            .Name("DoublesStats")
+            .Title("Doubles Skills Ratings Time Line")
+            .Legend(legend => legend
+                .Position(ChartLegendPosition.Bottom)
+            )
+            .DataSource(ds =>
+                ds.Read(read => read.Action("Match_Group_Doubles_Ratings_Graph", "Matches"))
+            .Group(g => g.Add(a => a.DisplayName)))
+            .ChartArea(chartArea => chartArea
+                .Background("transparent")
+            )
+            .SeriesDefaults(seriesDefaults =>
+                seriesDefaults.Line().Style(ChartLineStyle.Smooth)
+            )
+            .Series(series =>
+            {
+                series.Line(model => model.NewSkill).Name("Skill");
+            })
+            .CategoryAxis(axis => axis
+                .Labels(labels => labels.Rotation(90))
+                .MajorGridLines(lines => lines.Visible(false))
+            )
+            .ValueAxis(axis => axis
+                .Numeric().Labels(labels => labels.Format("{0}"))
+                .Line(line => line.Visible(false))
+                .AxisCrossingValue(-10)
+            )
+            .Tooltip(tooltip => tooltip
+                .Visible(true)
+                .Format("{0:n2}")))
+    </div>
+</div>

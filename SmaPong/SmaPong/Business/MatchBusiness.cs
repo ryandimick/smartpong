@@ -5,6 +5,7 @@ using System.Linq;
 using Moserware.Skills;
 using SmaPong.DataAccess;
 using SmaPong.Models;
+using SmartPong.Models;
 
 namespace SmaPong.Business
 {

@@ -195,6 +195,7 @@
     <Compile Include="Models\MatchDetail.cs" />
     <Compile Include="Models\MatchOutcome.cs" />
     <Compile Include="Models\MatchStatus.cs" />
+    <Compile Include="Models\MatchUserRating.cs" />
     <Compile Include="Models\NewMatch.cs" />
     <Compile Include="Models\OpponentRecord.cs" />
     <Compile Include="Models\Player.cs" />
