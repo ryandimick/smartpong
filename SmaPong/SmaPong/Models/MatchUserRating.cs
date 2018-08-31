@@ -55,7 +55,7 @@ namespace SmartPong.Models
         /// 
         /// </summary>
         [ForeignKey("MatchId")]
-        public Match Match { get; set; }
+        public int Match { get; set; }
 
         /// <summary>
         /// 
@@ -63,7 +63,7 @@ namespace SmartPong.Models
         /// 
         /// </summary>
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public int User { get; set; }
 
         /// <summary>
         /// 
@@ -71,6 +71,6 @@ namespace SmartPong.Models
         /// 
         /// </summary>
         [ForeignKey("RatingTypeId")]
-        public RatingType RatingType { get; set; }
+        public int RatingType { get; set; }
     }
 }

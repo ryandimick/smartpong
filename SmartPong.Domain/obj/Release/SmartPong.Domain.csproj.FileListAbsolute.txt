@@ -18,3 +18,16 @@ C:\Users\mletona\Source\Repos\smartpong\SmartPong.Domain\bin\Release\EntityFrame
 C:\Users\mletona\Source\Repos\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.csprojResolveAssemblyReference.cache
 C:\Users\mletona\Source\Repos\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.dll
 C:\Users\mletona\Source\Repos\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.pdb
+C:\ChechOut\smartpong\SmartPong.Domain\bin\Release\SmartPong.Domain.dll.config
+C:\ChechOut\smartpong\SmartPong.Domain\bin\Release\SmartPong.Domain.dll
+C:\ChechOut\smartpong\SmartPong.Domain\bin\Release\SmartPong.Domain.pdb
+C:\ChechOut\smartpong\SmartPong.Domain\bin\Release\EntityFramework.dll
+C:\ChechOut\smartpong\SmartPong.Domain\bin\Release\EntityFramework.SqlServer.dll
+C:\ChechOut\smartpong\SmartPong.Domain\bin\Release\Moserware.Skills.dll
+C:\ChechOut\smartpong\SmartPong.Domain\bin\Release\EntityFramework.xml
+C:\ChechOut\smartpong\SmartPong.Domain\bin\Release\EntityFramework.SqlServer.xml
+C:\ChechOut\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.csprojResolveAssemblyReference.cache
+C:\ChechOut\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.csproj.CoreCompileInputs.cache
+C:\ChechOut\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.csproj.CopyComplete
+C:\ChechOut\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.dll
+C:\ChechOut\smartpong\SmartPong.Domain\obj\Release\SmartPong.Domain.pdb

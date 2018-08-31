@@ -265,6 +265,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Compile Include="Models\PlayerRecord.cs" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="License.txt" />
     <Content Include="Scripts\jquery-1.8.2.js" />

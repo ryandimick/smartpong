@@ -1283,6 +1283,7 @@
     <Content Include="Script\js\jquery-ui-1.10.4.custom.min.js" />
     <Content Include="Script\js\jquery.min.js" />
     <Content Include="Content\img\favicon\manifest.json" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Script\js\jqueryval\jquery.validate-vsdoc.js" />
     <Content Include="Script\js\jqueryval\jquery.validate.js" />
     <Content Include="Script\js\jqueryval\jquery.validate.min.js" />

@@ -164,3 +164,7 @@ C:\Users\rdimick\Source\Repos\smartpong\SmaPong\SmaPong\bin\zh-Hant\System.Spati
 C:\Users\rdimick\Source\Repos\smartpong\SmaPong\SmaPong\obj\Release\SmaPong.csprojResolveAssemblyReference.cache
 C:\Users\rdimick\Source\Repos\smartpong\SmaPong\SmaPong\obj\Release\SmaPong.dll
 C:\Users\rdimick\Source\Repos\smartpong\SmaPong\SmaPong\obj\Release\SmaPong.pdb
+C:\ChechOut\smartpong\SmaPong\SmaPong\obj\Release\SmaPong.csprojResolveAssemblyReference.cache
+C:\ChechOut\smartpong\SmaPong\SmaPong\obj\Release\SmaPong.csproj.CoreCompileInputs.cache
+C:\ChechOut\smartpong\SmaPong\SmaPong\obj\Release\SmaPong.dll
+C:\ChechOut\smartpong\SmaPong\SmaPong\obj\Release\SmaPong.pdb
