@@ -1,0 +1,153 @@
+﻿@model IEnumerable<SmartPong.Models.Match>
+
+
+@using System.Web.Optimization
+@using Kendo.Mvc.UI
+@using SmartPong.Models.View
+
+@{
+    ViewBag.Title = "Pending";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Pending Matches</h2>
+                    </header>
+                    <div>
+                        <div class="widget-body no-padding">
+                            @(Html.Kendo().Grid<MatchGridViewModel>()
+                                .Name("grdPendingMatches")
+                                .Events(events =>
+                                {
+                                    events.DataBound("onDataBound");
+                                    events.Change("onChange");
+                                })
+                                .Filterable(filterable => filterable.Mode(GridFilterMode.Row))
+                                .Resizable(resize => resize.Columns(true))
+                                .Reorderable(reorder => reorder.Columns(true))
+                                .Scrollable(s => s.Virtual(true).Height("auto"))
+                                .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                .Sortable(sortable => sortable.AllowUnsort(true).SortMode(GridSortMode.MultipleColumn))
+                                .Columns(c =>
+                                {
+                                    c.Bound(p => p.MatchId).HtmlAttributes(new { style = "text-align: center" })
+                                        .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                    c.Bound(p => p.MatchType).HtmlAttributes(new { style = "text-align: center" })
+                                        .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                    c.Bound(p => p.MatchDate).HtmlAttributes(new { style = "text-align: center" })
+                                    .ClientTemplate("#= kendo.toString(MatchDate, \"MM/dd/yyyy HH:mm \") #")
+                                    .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                    c.Bound(p => p.WinnerOne).Title("Winner").HtmlAttributes(new { style = "text-align: center" })
+                                        .Filterable(f => f.Cell(cell =>
+                                        {
+                                            cell.ShowOperators(false);
+                                            cell.Operator("contains");
+                                            cell.Template("onFilterKeyDown");
+                                        }))
+                                        .HeaderHtmlAttributes(new { style = "text-align: center" });
+                                    c.Bound(p => p.LoserOne).Title("Loser").HtmlAttributes(new { style = "text-align: center" })
+                                        .Filterable(f => f.Cell(cell =>
+                                        {
+                                            cell.ShowOperators(false);
+                                            cell.Operator("contains");
+                                            cell.Template("onFilterKeyDown");
+                                        }))
+                                        .HeaderHtmlAttributes(new { style = "text-align: center" });
+                                    c.Bound(p => p.StatusText).HtmlAttributes(new { style = "text-align: center" })
+                                        .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                })
+                                .ToolBar(toolbar =>
+                                {
+                                    toolbar.Custom().Name("submit").Text("<i class=\"fa fa-check-circle fa-lg\"></i>" + "<h9 style=\"padding-left: .5em;\">Submit<h9/>")
+                                        .Url("#").HtmlAttributes(new { onclick = "updateRecords('submit')" });
+                                    toolbar.Custom().Name("deny").Text("<i class=\"fa fa-ban fa-lg\"></i>" + "<h9 style =\"padding-left: .5em;\">Deny<h9/>")
+                                        .Url("#").HtmlAttributes(new { onclick = "updateRecords('deny')" });
+                                })
+                                .DataSource(dataSource => dataSource
+                                    .Ajax()
+                                    .PageSize(10)
+                                    .Model(model =>
+                                    {
+                                        model.Id(p => p.MatchId);
+                                        model.Field(p => p.MatchDate);
+                                        model.Field(p => p.Loser);
+                                        model.Field(p => p.Winner);
+                                        model.Field(p => p.Status);
+                                    })
+                                    .Read(read => read.Action("Read_Pending_Matches", "Matches"))))
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+
+@{
+    Html.RenderPartial("_notification");
+}
+@Styles.Render("~/css/smartpong-style.css")
+<script>
+
+    function onDataBound() {
+        configureButtons();
+    }
+
+    function onChange() {
+        configureButtons();
+    }
+
+    function configureButtons() {
+        var grid = $("#grdPendingMatches").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length < 1) {
+            disableToolbarBtns('submit');
+            disableToolbarBtns('deny');
+        } else {
+            if (selectedRows.length < 1) {
+                disableToolbarBtns('submit');
+                disableToolbarBtns('deny');
+            } else {
+                enableToolbarBtns('submit');
+                enableToolbarBtns('deny');
+            }
+        }
+    }
+
+    function updateRecords(action) {
+        var grid = $("#grdPendingMatches").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var enableIds = [];
+            selectedRows.each(function () {
+                var selectedItem = grid.dataItem(this);
+                enableIds.push(selectedItem.MatchId);
+            });
+            if (enableIds.length > 0) {
+                $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("Submit_Pending_Matches", "Matches")",
+                    data: JSON.stringify({ updateRows: enableIds, action: action }),
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        if (data.success === true) {
+                            grid.dataSource.read();
+                            SuccessNotification("Sucessful Update!");
+                        } else {
+                            ErrorNotification(data.message);
+                        }
+                    }
+                });
+            }
+        }
+    }
+</script>

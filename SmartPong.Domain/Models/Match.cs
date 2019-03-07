@@ -94,6 +94,14 @@ namespace SmartPong.Models
 
         /// <summary>
         /// 
+        /// Object to input users game outcome.
+        /// 
+        /// </summary>
+        //[ForeignKey("MatchId")]
+        //public MatchScores MatchScores { get; set; }
+
+        /// <summary>
+        /// 
         /// The status of the match.
         /// 
         /// </summary>

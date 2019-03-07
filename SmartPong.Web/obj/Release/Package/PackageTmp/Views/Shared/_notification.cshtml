@@ -1,0 +1,26 @@
+﻿@using Kendo.Mvc.UI
+@(Html.Kendo().Notification()
+      .Name("notification")
+      .Position(p => p.Pinned(true).Bottom(30).Right(30))
+      .Stacking(NotificationStackingSettings.Up)
+      .AutoHideAfter(2000)
+      .Templates(t =>
+      {
+          t.Add().Type("error").ClientTemplateID("errorTemplate");
+          t.Add().Type("upload-success").ClientTemplateID("successTemplate");
+      }).Height(70))
+
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <img src="../Content/img/fa-check-circle-o_45_0_ffffff_none.png" />
+        <h3>#= message #</h3>
+    </div>
+</script>
+
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass" style="height: 20px">
+        <img src="../content/img/typcn-delete-outline_45_0_ffffff_none.png" />
+        <h3>#= message #</h3>
+    </div>
+</script>
+

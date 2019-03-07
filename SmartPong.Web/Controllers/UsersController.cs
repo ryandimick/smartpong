@@ -37,9 +37,9 @@ namespace SmartPong.Controllers
 
         public ActionResult Register()
         {
-            string name = User.Identity.Name;
-            User activeDirectoryUser = ActiveDirectoryServices.FetchUser(name);
-            return View(activeDirectoryUser);
+            //string name = User.Identity.Name;
+            //User activeDirectoryUser = name != null ? ActiveDirectoryServices.FetchUser(name): new User();
+            return View(new User());
         }
 
         [HttpPost]
@@ -50,7 +50,8 @@ namespace SmartPong.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Global.Repository.CreateUser(user.Username, user.GivenName, user.Surname, user.Email, user.Nickname);
+                    var username = string.Format(@"GLOBALSMA\{0}", user.Username);
+                    Global.Repository.CreateUser(username, user.GivenName, user.Surname, user.Email, user.Nickname);
 
                     return RedirectToAction("Index", "Rankings");
                 }

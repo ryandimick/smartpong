@@ -1,0 +1,88 @@
+﻿@model IEnumerable<SmartPong.Models.User>
+@{
+    ViewBag.Title = "Create";
+}
+
+<script type="text/javascript">
+
+        function submitMatch() {
+            var matchDate = $("#matchDate").val();
+            var opponentId = $("#list").find('option').filter(function () { return $.trim($(this).text()) === $("#opponent").val() }).attr('id');
+            var yourscore = $("#yourscore").val();
+            var theirscore = $("#theirscore").val();
+            var values = { matchDate: matchDate, opponentId: opponentId, yourscore: yourscore, theirscore: theirscore };
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Create", "Matches")",
+                data: JSON.stringify(values),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                complete: function (data) {
+                    if (data.success === true)
+                    {
+                        window.location.href = '@Url.Action("Index", "Matches")';
+                    }
+                }
+            });
+        }
+    </script>
+
+<div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+    <div class="well no-padding">
+        <form id="smart-form-submit" class="smart-form client-form">
+            <header>
+                Submit Match
+            </header>
+            <fieldset>
+                <section>
+                    <label class="label">Match Date</label>
+                    <label class="input">
+                        <i class="icon-append fa fa-calendar"></i>
+                        <input type="text" id="matchDate" autocomplete="off" value="@DateTime.Now.ToString("g")">
+                    </label>
+                </section>
+            </fieldset>
+            <fieldset>
+                <section>
+                    <label class="label">Opponent</label>
+                    <label class="input">
+                        <input id="opponent" type="text" list="list">
+                        <datalist id="list">
+                            @foreach (var item in Model)
+                            {
+                                <option id="@item.UserId" value="@item.DisplayName">@item.DisplayName</option>
+                            }
+                        </datalist>
+                    </label>
+                </section>
+            </fieldset>
+            <fieldset>
+                <section>
+                    <label class="label">Your Score</label>
+                    <label class="input">
+                        <i class="icon-append fa fa-user"></i>
+                        <input type="text" placeholder="21" id="yourscore" autocomplete="off">
+                    </label>
+                </section>
+                <section>
+                    <label class="label">Their Score</label>
+                    <label class="input">
+                        <i class="icon-append fa fa-user"></i>
+                        <input type="text" placeholder="18" id="theirscore" autocomplete="off">
+                    </label>
+                </section>
+            </fieldset>
+            <footer>
+                <a id="submitMatch" class="btn btn-primary" onclick="submitMatch()">
+                    Submit
+                </a>
+            </footer>
+            <div class="message">
+                <i class="fa fa-check"></i>
+                <p>
+                    Thank you!
+                </p>
+            </div>
+        </form>
+    </div>
+</div>

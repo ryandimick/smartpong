@@ -30,6 +30,13 @@ namespace SmartPong
 
         /// <summary>
         /// 
+        /// The collection of match scores in the database context.
+        /// 
+        /// </summary>
+        public DbSet<MatchScores> MatchScores { get; set; }
+
+        /// <summary>
+        /// 
         /// The collection of match participants in the database context.
         /// 
         /// </summary>

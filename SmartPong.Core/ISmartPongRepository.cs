@@ -31,6 +31,17 @@ namespace SmartPong
 
         /// <summary>
         /// 
+        /// Submits a new matchscore into the SmartPong application that will require confirmation.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="matchScore">The complete matchScore object to create.</param>
+        /// 
+        /// <returns>The matchScore that was submitted.</returns>
+        MatchScores SubmitMatchScore(MatchScores matchScore);
+
+        /// <summary>
+        /// 
         /// Creates a user.
         /// 
         /// </summary>

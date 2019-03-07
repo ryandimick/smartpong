@@ -68,7 +68,7 @@ namespace SmartPong.Controllers
                 }
                 return Json(new { success = true });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return Json(new { success = false, message = "Invalid Operation!" });
             }
@@ -77,7 +77,19 @@ namespace SmartPong.Controllers
         private static void SubmitMatch(MatchCreateViewModel match, Match matchToSubmit)
         {
             matchToSubmit.SetOutcome(match.YourScore > match.OpponentScore ? 1 : 2);
-            Global.Repository.CreateMatch(matchToSubmit);
+            var matchRecoded = Global.Repository.CreateMatch(matchToSubmit);
+            var matchScores = RecordMatchOutcome(match, matchRecoded.MatchId);
+            Global.Repository.SubmitMatchScore(matchScores);
+        }
+
+        private static MatchScores RecordMatchOutcome(MatchCreateViewModel match, int matchId)
+        {
+            return new MatchScores
+            {
+                MatchId = matchId,
+                LosingTeamScore = match.YourScore < match.OpponentScore ? match.YourScore : match.OpponentScore,
+                WinningTeamScore = match.YourScore > match.OpponentScore ? match.YourScore : match.OpponentScore
+            };
         }
 
         public ActionResult Create()
@@ -113,7 +125,9 @@ namespace SmartPong.Controllers
         {
             try
             {
-                updateRows.ForEach(x => Global.Repository.ConfirmMatch(x, GetUserInfo().UserId, action));
+                var list = updateRows.Select(id => Global.Repository.RetrieveMatches().FirstOrDefault(f => f.MatchId == id)).ToList().OrderByDescending(o => o.CreateDate);
+
+                list.ForEach(x => Global.Repository.ConfirmMatch(x.MatchId, GetUserInfo().UserId, action));
 
                 return Json(new { success = true });
             }

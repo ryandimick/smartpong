@@ -54,6 +54,7 @@
     <Compile Include="Exceptions\SmartPongException.cs" />
     <Compile Include="Models\Match.cs" />
     <Compile Include="Models\MatchParticipant.cs" />
+    <Compile Include="Models\MatchScores.cs" />
     <Compile Include="Models\MatchStatus.cs" />
     <Compile Include="Models\MatchTeamRating.cs" />
     <Compile Include="Models\MatchType.cs" />

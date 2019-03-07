@@ -49,6 +49,20 @@ namespace SmartPong
 
         /// <summary>
         /// 
+        /// Submits a new match scores into the SmartPong application that will require confirmation.
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="matchScore">The complete matchscore object to create.</param>
+        /// 
+        /// <returns>The match score that was submitted.</returns>
+        public MatchScores SubmitMatchScore(MatchScores matchScore)
+        {
+            return _matchManager.SubmitMatchScores(matchScore);
+        }
+
+        /// <summary>
+        /// 
         /// Creates a user.
         /// 
         /// </summary>
@@ -131,6 +145,18 @@ namespace SmartPong
         public User EnableUser(string username)
         {
             return _userManager.EnableUser(username);
+        }
+
+        /// <summary>
+        /// 
+        /// Returns all matches.
+        /// 
+        /// </summary>
+        /// 
+        /// <returns>The collection of matches.</returns>
+        public IEnumerable<MatchScores> RetrieveMatchScores()
+        {
+            return _matchManager.RetrieveMatchScores();
         }
 
         /// <summary>

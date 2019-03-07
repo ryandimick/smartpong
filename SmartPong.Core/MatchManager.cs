@@ -24,7 +24,7 @@ namespace SmartPong
             match.ConfirmDate = DateTime.Now;
             match.ConfirmUser = userId;
             match.Status = status == "deny" ? MatchStatus.Denied : MatchStatus.Posted;
-
+            
             bool dirty = false;
 
             foreach (var lastMatch in match.MatchParticipants.Select(participant => FindLastMatch(participant.UserId, match.MatchDate.Value)))
@@ -72,8 +72,23 @@ namespace SmartPong
             _context.SaveChanges();
 
             UpdateNewerMatches(match, match.MatchTypeId, updateDate, dirtyUsers);
+            UpdateMatchesScore(match);
 
             return match;
+        }
+
+        private void UpdateMatchesScore(Match match)
+        {
+            MatchScores updatedMatchScore = null;
+            var oldMatchScore = RetrieveMatchScores().FirstOrDefault(fod => fod.MatchId == match.MatchId);
+            if (oldMatchScore != null)
+            {
+                updatedMatchScore = oldMatchScore;
+                updatedMatchScore.Status = match.Status;
+            }
+
+            _context.Entry(oldMatchScore).CurrentValues.SetValues(updatedMatchScore);
+            _context.SaveChanges();
         }
 
         internal Match CreateMatch(Match newMatch)
@@ -85,6 +100,7 @@ namespace SmartPong
 
             ProcessMatch(newMatch);
 
+            
             _context.Matches.Add(newMatch);
             _context.SaveChanges();
 
@@ -97,9 +113,19 @@ namespace SmartPong
             return newMatch;
         }
 
+        internal MatchScores SubmitMatchScores(MatchScores matchScore)
+        {
+            var matcheScore = _context.MatchScores.Add(matchScore);
+            _context.SaveChanges();
+            return matcheScore;
+        }
+
         internal void DeleteMatch(int matchId)
         {
             var match = _context.Matches.First(m => m.MatchId == matchId);
+            var matchScore = RetrieveMatchScores().FirstOrDefault(f => f.MatchId == match.MatchId);
+
+            if (matchScore != null) _context.MatchScores.Remove(matchScore);
             _context.Matches.Remove(match);
             _context.SaveChanges();
 
@@ -223,6 +249,11 @@ namespace SmartPong
         public IEnumerable<MatchUserRating> RetrieveMatchUserRatings()
         {
             return _context.MatchUserRatings;
+        }
+
+        public IEnumerable<MatchScores> RetrieveMatchScores()
+        {
+            return _context.MatchScores; //.Include(x => x.MatchId);
         }
 
         private void UpdateNewerMatches(Match newMatch, int matchType, DateTime matchDate, ICollection<User> dirtyUsers)

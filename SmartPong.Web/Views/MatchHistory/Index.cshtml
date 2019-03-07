@@ -1,0 +1,135 @@
+﻿@using Kendo.Mvc.UI
+@using SmartPong.Controllers
+@using SmartPong.Models
+@using SmartPong.Models.View
+
+@{
+    ViewBag.Title = "Match History";
+}
+
+<div id="content">
+    <section id="widget-chart" class="">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
+            <header>
+                <span class="widget-icon"> <i class="fa fa-bar-chart"></i> </span>
+                <h2>Ranking Charts</h2>
+            </header>
+            <div>
+                @(Html.Kendo().TabStrip()
+                                        .Name("ModalTabStrip")
+                                        .SelectedIndex(0)
+                                        .HtmlAttributes(new { style = "padding-bottom = 10px;" })
+                                        .TabPosition(TabStripTabPosition.Top)
+                                        .Items(items =>
+                                        {
+                                            items.Add()
+                                          .Text("Singles Ranking")
+                                          .Content(@<text>
+                                            <div class="form-horizontal form-widgets no-padding col-sm-12">
+                                                <div class="no-padding col-sm-6">
+                                                    @(Html.Kendo().Grid<UserRankingViewModel>()
+                                                                   .Name("grdSgRankings")
+                                                                   .Filterable(filterable => filterable.Mode(GridFilterMode.Row))
+                                                                   //.Events(e => e.Change("onChange"))
+                                                                   .Resizable(resize => resize.Columns(true))
+                                                                   .Reorderable(reorder => reorder.Columns(true))
+                                                                   .Scrollable(s => s.Virtual(true).Height("auto"))
+                                                                   .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                   .Sortable(sortable => sortable.AllowUnsort(true).SortMode(GridSortMode.MultipleColumn))
+                                                                   .Columns(c =>
+                                                                   {
+                                                                       c.Bound(p => p.DisplayName).Title("Player Name").Filterable(f => f.Cell(cell =>
+                                                                               {
+                                                                            cell.ShowOperators(false);
+                                                                            cell.Operator("contains");
+                                                                            cell.Template("onFilterKeyDown");
+                                                                        })).Width(200).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                                                       c.Bound(p => p.Rating).Width(90).HtmlAttributes(new { style = "text-align: center" }).Format("{0:n2}")
+                                                                                       .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                                                       c.Bound(p => p.ActivityDate).Width(125).HtmlAttributes(new { style = "text-align: center" }).ClientTemplate("#= kendo.toString(ActivityDate, \"MM/dd/yyyy HH:mm \") #")
+                                                                                       .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                                                       c.Bound(p => p.Skill).Width(90).HtmlAttributes(new { style = "text-align: center" }).Format("{0:n2}")
+                                                                                       .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                                                       c.Bound(p => p.Variance).Width(90).Title("Variance").HtmlAttributes(new { style = "text-align: center" }).Format("{0:n2}")
+                                                                                       .Filterable(false).HeaderHtmlAttributes(new { style = "text-align: center" });
+                                                                   })
+                                                                   .DataSource(dataSource => dataSource
+                                                                       .Ajax()
+                                                                       .PageSize(5)
+                                                                       .Model(model =>
+                                                                       {
+                                                                           model.Id(p => p.UserId);
+                                                                           model.Field(p => p.Rank);
+                                                                       }).Read(read => read.Action("Singles", "Users"))))
+                                                </div>
+                                                <div class=" no-padding col-sm-6">
+                                                    @(Html.Kendo().Chart<SingleRakingsChartViewModels>()
+                                                                .Name("SingleStats")
+                                                                .Title("Singles Skills Rating Time Line").Events(e => e.AxisLabelClick("EventChart"))
+                                                                .Legend(legend => legend
+                                                                    .Position(ChartLegendPosition.Bottom)
+                                                                )
+                                                                .DataSource(ds =>
+                                                                    ds.Read(read => read.Action("Match_Group_Single_Ratings_Graph", "Matches"))
+                                                                        .Group(g => g.Add(t => t.DisplayName)))
+                                                                .ChartArea(chartArea => chartArea
+                                                                    .Background("transparent")
+                                                                )
+                                                                .SeriesDefaults(seriesDefaults =>
+                                                                    seriesDefaults.Line().Style(ChartLineStyle.Smooth)
+                                                                )
+                                                                .Series(series =>
+                                                                {
+                                                                    series.Line(model => model.NewSkill).Name("Skill");
+                                                                })
+                                                                .CategoryAxis(axis => axis
+                                                                    //.Categories(c => c.MatchDate)
+                                                                    .Labels(labels => labels.Rotation(90))
+                                                                    .MajorGridLines(lines => lines.Visible(false))
+                                                                )
+                                                                .ValueAxis(axis => axis
+                                                                    .Numeric().Labels(labels => labels.Format("{0}"))
+                                                                    .Line(line => line.Visible(false))
+                                                                    .AxisCrossingValue(-10)
+                                                                )
+                                                                .Tooltip(tooltip => tooltip
+                                                                    .Visible(true)
+                                                                    .Format("{0:n2}")))
+                                                </div>
+                                            </div>
+                                        </text>);
+                                      items.Add()
+                                                  .Text("Doubles Rankings")
+                                                  .LoadContentFrom(Url.Action("Doubles", "Rankings"));
+                                  }))
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    function EventChart() {
+        alert(this.options.title.text);
+    }
+
+    function onChange() {
+
+        var grid = $("#grdSgRankings").data("kendoGrid");
+        var selectedRows = grid.select();
+        if (selectedRows.length > 0) {
+            var enableIds = [];
+            selectedRows.each(function() {
+                var selectedItem = grid.dataItem(this);
+                enableIds.push(selectedItem.UserId);
+            });
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Match_User_Selected_Graph", "Matches")",
+                data: JSON.stringify(changedRows),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8'
+            });
+        }
+    }
+</script>
+

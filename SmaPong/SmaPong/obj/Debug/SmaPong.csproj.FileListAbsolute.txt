@@ -196,15 +196,9 @@ C:\ChechOut\smartpong\SmaPong\SmaPong\bin\SmaPong.dll
 C:\ChechOut\smartpong\SmaPong\SmaPong\bin\SmaPong.pdb
 C:\ChechOut\smartpong\SmaPong\SmaPong\bin\Newtonsoft.Json.dll
 C:\ChechOut\smartpong\SmaPong\SmaPong\bin\System.Net.Http.dll
-C:\ChechOut\smartpong\SmaPong\SmaPong\bin\Microsoft.Web.Infrastructure.xml
 C:\ChechOut\smartpong\SmaPong\SmaPong\bin\System.Net.Http.Formatting.xml
-C:\ChechOut\smartpong\SmaPong\SmaPong\bin\System.Web.Helpers.xml
 C:\ChechOut\smartpong\SmaPong\SmaPong\bin\System.Web.Http.xml
 C:\ChechOut\smartpong\SmaPong\SmaPong\bin\System.Web.Http.WebHost.xml
-C:\ChechOut\smartpong\SmaPong\SmaPong\bin\System.Web.Razor.xml
-C:\ChechOut\smartpong\SmaPong\SmaPong\bin\System.Web.WebPages.xml
-C:\ChechOut\smartpong\SmaPong\SmaPong\bin\System.Web.WebPages.Deployment.xml
-C:\ChechOut\smartpong\SmaPong\SmaPong\bin\System.Web.WebPages.Razor.xml
 C:\ChechOut\smartpong\SmaPong\SmaPong\obj\Debug\SmaPong.csprojResolveAssemblyReference.cache
 C:\ChechOut\smartpong\SmaPong\SmaPong\obj\Debug\SmaPong.csproj.CoreCompileInputs.cache
 C:\ChechOut\smartpong\SmaPong\SmaPong\obj\Debug\SmaPong.dll
